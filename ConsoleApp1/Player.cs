@@ -539,8 +539,7 @@ namespace ConsoleApp1
                 Vec2D pos = new Vec2D(colision_rect.Pos.X + colision_rect.Size.X / 2.0f+offset, colision_rect.Pos.Y + colision_rect.Size.Y);
                 textureToDraw.DrawBottomCenter(height, false, pos, flip);
                 return;
-            }
-            if (IsClimbing)
+            }else if (IsClimbing)
             {
                 textureToDraw = game.GlobalTextures.PlayerTextures.climb_animation.GetCurrentTexture();
             }
@@ -554,29 +553,28 @@ namespace ConsoleApp1
                 float dest_height;
                 float original_height = colision_rect.Size.Y;
                 float original_width = colision_rect.Size.X;
-
-                if (index == 0 || index == 2)
+                if (index == 0)
                 {
-                    dest_height = original_height * 1.5f;
+                    dest_height = original_height * 1.25f;
+                    dest_width = dest_height * aspect;
+                }
+                else if (index == 1)
+                {
+                    dest_height = original_height * 1.1f;
                     dest_width = dest_height * aspect;
                 }
                 else
                 {
-                    dest_width = original_width * 2.8f;
-                    dest_height = dest_width / aspect;
+                    dest_height = original_height * 0.7f;
+                    dest_width = dest_height * aspect;
                 }
-
                 float dest_x;
                 float dest_y = colision_rect.Pos.Y + original_height - dest_height;
 
                 if (!side)
-                {
                     dest_x = colision_rect.Pos.X;
-                }
                 else
-                {
                     dest_x = colision_rect.Pos.X + original_width - dest_width;
-                }
 
                 drawRect = new Rect2D(dest_x, dest_y, dest_width, dest_height);
             }
