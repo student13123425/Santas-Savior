@@ -51,7 +51,7 @@ namespace ConsoleApp1
             float bottomY = rect.Pos.Y + rect.Size.Y;
             Vec2D bottomCenterPos = new Vec2D(centerX, bottomY);
             
-            texture.DrawBottomCenter(rect.Size.X, true, bottomCenterPos);
+            texture.DrawBottomCenter(rect.Size.Y+20, false, bottomCenterPos);
 
             if (showDebug)
             {
