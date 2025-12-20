@@ -319,6 +319,9 @@ namespace ConsoleApp1
                 bool animFinished = instance.GlobalTextures.PlayerTextures.death_animation.Update();
                 bool audioFinished = instance.GlobalAudio.Death.IsFinished();
                 
+                process_fall(level);
+                apply_velocity(level);
+
                 if (animFinished && audioFinished)
                 {
                     instance.onLive();
