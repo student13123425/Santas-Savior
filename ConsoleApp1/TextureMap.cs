@@ -146,13 +146,13 @@ namespace ConsoleApp1
             
             ThrowAnimationRight = new AnimationPlayer([
                 new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_1.png"), renderer), 
-                new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_2.png"), renderer), 
+                new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_2.png"), renderer,new Vec2D(0,20)), 
                 new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_3.png"), renderer)
             ], 0.4f, false);
             
             ThrowAnimationDown = new AnimationPlayer([
                 new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_1.png"), renderer), 
-                new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_2.png"), renderer)
+                new TextureObject(Raylib.LoadTexture("./sprites/GolumnBarrel_2.png"), renderer,new Vec2D(0,20))
             ], 0.2f, false);
             
             IdelModeAnimation = new AnimationPlayer([
