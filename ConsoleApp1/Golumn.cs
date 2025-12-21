@@ -41,26 +41,14 @@ namespace ConsoleApp1
             int offset_y = 0;
             if (IsIdel)
             {
-                textureToDraw = game.GlobalTextures.DonkeyKongTextures.IdelModeAnimation.GetCurrentTexture();
+                textureToDraw = game.GlobalTextures.GolumnTextures.IdelModeAnimation.GetCurrentTexture();
             }
             else
             {
                 if (animation_id == 0)
-                {
-                    textureToDraw = game.GlobalTextures.DonkeyKongTextures.idel;
-                }
-                else if (animation_id == 1)
-                {
-                    textureToDraw = game.GlobalTextures.DonkeyKongTextures.ThrowAnimationRight.GetCurrentTexture();
-                    if (game.GlobalTextures.DonkeyKongTextures.ThrowAnimationRight.GetFrameIndex()==1)
-                        offset_y = 20;
-                }
+                    textureToDraw = game.GlobalTextures.GolumnTextures.idel;
                 else
-                {
-                    textureToDraw = game.GlobalTextures.DonkeyKongTextures.ThrowAnimationDown.GetCurrentTexture();
-                    if (game.GlobalTextures.DonkeyKongTextures.ThrowAnimationRight.GetFrameIndex()==1)
-                        offset_y = 20;
-                }
+                    textureToDraw = game.GlobalTextures.GolumnTextures.ThrowAnimationRight.GetCurrentTexture();
             }
             
             textureToDraw.DrawBottomCenter(
@@ -98,12 +86,12 @@ namespace ConsoleApp1
             if (choice == 0)
             {
                 this.animation_id = 1;
-                game.GlobalTextures.DonkeyKongTextures.ThrowAnimationRight.Play(true);
+                game.GlobalTextures.GolumnTextures.ThrowAnimationRight.Play(true);
             }
             else
             {
                 this.animation_id = 2;
-                game.GlobalTextures.DonkeyKongTextures.ThrowAnimationDown.Play(true);
+                game.GlobalTextures.GolumnTextures.ThrowAnimationDown.Play(true);
             }
 
             this.has_thrown = false;
@@ -120,7 +108,7 @@ namespace ConsoleApp1
         {
             if (IsIdel)
             {
-                game.GlobalTextures.DonkeyKongTextures.IdelModeAnimation.Update();
+                game.GlobalTextures.GolumnTextures.IdelModeAnimation.Update();
                 process_timer(game);
             }
             else
@@ -129,7 +117,7 @@ namespace ConsoleApp1
 
                 if (animation_id == 1)
                 {
-                    var anim = game.GlobalTextures.DonkeyKongTextures.ThrowAnimationRight;
+                    var anim = game.GlobalTextures.GolumnTextures.ThrowAnimationRight;
                     bool finished = anim.Update();
 
                     if (!has_thrown && anim.GetFrameIndex() == 2)
@@ -143,7 +131,7 @@ namespace ConsoleApp1
                 }
                 else if (animation_id == 2)
                 {
-                    var anim = game.GlobalTextures.DonkeyKongTextures.ThrowAnimationDown;
+                    var anim = game.GlobalTextures.GolumnTextures.ThrowAnimationDown;
                     bool finished = anim.Update();
 
                     if (!has_thrown && anim.GetFrameIndex() == 1)

@@ -531,7 +531,7 @@ namespace ConsoleApp1
             {
                 textureToDraw = game.GlobalTextures.PlayerTextures.death_animation.GetCurrentTexture();
                 int offset = 0;
-                if (game.GlobalTextures.PlayerTextures.death_animation.GetFrameIndex() == 3)
+                if (game.GlobalTextures.PlayerTextures.death_animation.GetFrameIndex() == 4)
                     offset = 22;
                 int height = 80 + offset;
                 if (!side)

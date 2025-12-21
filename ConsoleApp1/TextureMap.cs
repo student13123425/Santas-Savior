@@ -133,7 +133,7 @@ namespace ConsoleApp1
         }
     }
 
-    public class DonkeyKongTextureMap
+    public class GolumnTextureMap
     {
         public TextureObject idel;
         public AnimationPlayer ThrowAnimationRight;
@@ -218,7 +218,7 @@ namespace ConsoleApp1
         public TextureObject EndSprite;
 
         public PlayerTextureMap PlayerTextures;
-        public DonkeyKongTextureMap DonkeyKongTextures;
+        public GolumnTextureMap GolumnTextures;
         public SantaClausTextureMap SantaClaus;
         public ElevatorTextureMap ElevatorTextures;
         public ConveyorTextureMap ConveyorTextures;
@@ -236,7 +236,7 @@ namespace ConsoleApp1
         public TextureMap()
         {
             PlayerTextures = new PlayerTextureMap();
-            DonkeyKongTextures = new DonkeyKongTextureMap();
+            GolumnTextures = new GolumnTextureMap();
             SantaClaus = new SantaClausTextureMap();
             ElevatorTextures = new ElevatorTextureMap();
             ConveyorTextures = new ConveyorTextureMap();
@@ -266,7 +266,7 @@ namespace ConsoleApp1
 
                 case 2: // Enemy
                     status.Title = "Loading Enemies...";
-                    DonkeyKongTextures.Load(renderer);
+                    GolumnTextures.Load(renderer);
                     oilbarrel = new AnimationPlayer([
                         new TextureObject(Raylib.LoadTexture("./sprites/Burning barel 1.png"), renderer), 
                         new TextureObject(Raylib.LoadTexture("./sprites/Burning barel 2.png"), renderer)
