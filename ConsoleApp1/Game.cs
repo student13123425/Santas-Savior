@@ -208,14 +208,15 @@ namespace ConsoleApp1
         }
         void process_level_end()
         {
-            this.current_level_id += 1;
-
-            if (this.current_level_id >= this.levels.Length)
+            current_level_id += 1;
+            if (current_level_id < levels.Length)
             {
+                GlobalAudio.LevelCompleted.Play(false);
+                start_level(this.current_level_id);
             }
             else
             {
-                this.start_level(this.current_level_id);
+                
             }
         }
 
