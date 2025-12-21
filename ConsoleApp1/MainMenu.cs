@@ -11,7 +11,7 @@ namespace ConsoleApp1
     public class MainMenu
     {
         Button[] buttons = new Button[3];
-
+        int selected_item=-1;
         public MainMenu()
         {
             string[] paths = new string[3];
@@ -46,17 +46,33 @@ namespace ConsoleApp1
                 buttons[i].render(game.GlobalTextures.MainMenuButtons[i].Texture, game.GlobalTextures.renderer);
         }
 
-        public int update()
+        public void proces_select(Game game, int index)
         {
-            if (Raylib.IsKeyPressed(KeyboardKey.One))
-                return 0;
-            if (Raylib.IsKeyPressed(KeyboardKey.Two))
-                return 1;
-            if (Raylib.IsKeyPressed(KeyboardKey.Three))
-                return 2;
+            selected_item=index;
+            game.GlobalAudio.MenuSelect.Play(false);
+        }
+
+        public bool is_ready_to_output(Game game)
+        {
+            return selected_item != -1 && game.GlobalAudio.MenuSelect.IsFinished();
+        }
+        public int update(Game game)
+        {
+            if (is_ready_to_output(game))
+            {
+                int buffer = selected_item;
+                selected_item = -1;
+                return buffer;
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.One)&&selected_item==-1)
+                proces_select(game,0);
+            if (Raylib.IsKeyPressed(KeyboardKey.Two)&&selected_item==-1)
+                proces_select(game,1);
+            if (Raylib.IsKeyPressed(KeyboardKey.Three)&&selected_item==-1)
+                proces_select(game,2);
             for (int i = 0; i < buttons.Length; i++)
-                if (buttons[i].update())
-                    return i;
+                if (buttons[i].update()&&selected_item==-1)
+                    proces_select(game,i);
             return -1;
         }
 

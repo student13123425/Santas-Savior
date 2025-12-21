@@ -233,7 +233,7 @@ namespace ConsoleApp1
             }
             else if (current_level_id == -1)
             {
-                int output = MainMenu.update();
+                int output = MainMenu.update(this);
                 if (output == 0 || output == 1)
                 {
                     int id = 0;
