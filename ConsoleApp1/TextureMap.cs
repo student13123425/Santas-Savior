@@ -80,9 +80,8 @@ namespace ConsoleApp1
                 new TextureObject(Raylib.LoadTexture("./sprites/Death2.png"), renderer), 
                 new TextureObject(Raylib.LoadTexture("./sprites/Death3.png"), renderer),
                 new TextureObject(Raylib.LoadTexture("./sprites/Death4.png"), renderer),
-                new TextureObject(Raylib.LoadTexture("./sprites/Death5.png"), renderer)
+                new TextureObject(Raylib.LoadTexture("./sprites/Death5.png"), renderer,new Vec2D(22,0))
             ], 0.3f, false);
-            
             if (death_animation.FrameCount > 1)
             {
                 float totalDuration = death_animation.FrameDuration * death_animation.FrameCount;

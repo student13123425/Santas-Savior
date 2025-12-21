@@ -530,13 +530,8 @@ namespace ConsoleApp1
             if (IsDying)
             {
                 textureToDraw = game.GlobalTextures.PlayerTextures.death_animation.GetCurrentTexture();
-                int offset = 0;
-                if (game.GlobalTextures.PlayerTextures.death_animation.GetFrameIndex() == 4)
-                    offset = 22;
-                int height = 80 + offset;
-                if (!side)
-                    offset *= -1;
-                Vec2D pos = new Vec2D(colision_rect.Pos.X + colision_rect.Size.X / 2.0f+offset, colision_rect.Pos.Y + colision_rect.Size.Y);
+                int height = 80+(int)textureToDraw.Offset.X;
+                Vec2D pos = new Vec2D(colision_rect.Pos.X + colision_rect.Size.X / 2.0f, colision_rect.Pos.Y + colision_rect.Size.Y);
                 textureToDraw.DrawBottomCenter(height, false, pos, flip);
                 return;
             }else if (IsClimbing)
