@@ -4,12 +4,33 @@ using System.Collections.Generic;
 
 namespace ConsoleApp1
 {
+    public class EnemyTextureMap
+    {
+        public AnimationPlayer walk_animation;
+        public AnimationPlayer explode_animation;
+
+        public void Load(TextureRenderer renderer)
+        {
+            walk_animation = new AnimationPlayer([
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyWalk1.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyWalk2.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyWalk3.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyWalk4.png"), renderer),
+            ], 0.3f, true);
+            walk_animation.Play();
+            explode_animation = new AnimationPlayer([
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyExplode1.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyExplode2.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyExplode3.png"), renderer),
+            ], 0.25f, false);
+        }
+    }
     public class SantaClausTextureMap
     {
         public AnimationPlayer anim;
         public TextureObject[] drops;
         public Dictionary<int, int> DropScores;
-
+    
         public void Load(TextureRenderer renderer)
         {
              anim = new AnimationPlayer([
@@ -228,9 +249,10 @@ namespace ConsoleApp1
         public Font GameFont;
         public TextureObject[] SlideItem = new TextureObject[2];
         public TextureObject[] Jumpers = new TextureObject[2];
+        public EnemyTextureMap EnemyTextures;
 
         private int _loadingStep = 0;
-        private const int TotalSteps = 6;
+        private const int TotalSteps = 7;
 
         public TextureMap()
         {
@@ -239,6 +261,7 @@ namespace ConsoleApp1
             SantaClaus = new SantaClausTextureMap();
             ElevatorTextures = new ElevatorTextureMap();
             ConveyorTextures = new ConveyorTextureMap();
+            EnemyTextures = new EnemyTextureMap();
         }
 
         public LoadingStatus UpdateLoad()
@@ -248,7 +271,7 @@ namespace ConsoleApp1
 
             switch (_loadingStep)
             {
-                case 0: // Level Data
+                case 0:
                     status.Title = "Loading Level Assets...";
                     platform[0] = new TextureObject(Raylib.LoadTexture("./sprites/Platform.png"), renderer);
                     platform[1] = new TextureObject(Raylib.LoadTexture("./sprites/Platform2.png"), renderer);
@@ -257,13 +280,11 @@ namespace ConsoleApp1
                     ElevatorTextures.Load(renderer);
                     ConveyorTextures.Load(renderer);
                     break;
-
-                case 1: // Player
+                case 1:
                     status.Title = "Loading Player...";
                     PlayerTextures.Load(renderer);
                     break;
-
-                case 2: // Enemy
+                case 2:
                     status.Title = "Loading Enemies...";
                     GolumnTextures.Load(renderer);
                     oilbarrel = new AnimationPlayer([
@@ -274,8 +295,7 @@ namespace ConsoleApp1
                     Jumpers[0] = new TextureObject(Raylib.LoadTexture("./sprites/Jumper1.png"), renderer);
                     Jumpers[1] = new TextureObject(Raylib.LoadTexture("./sprites/Jumper2.png"), renderer);
                     break;
-
-                case 3: // Menu Data
+                case 3:
                     status.Title = "Loading Menus...";
                     MainMenuBackground = new TextureObject(Raylib.LoadTexture("./sprites/MainMenu Screen.png"), renderer);
                     MainMenuButtons[0] = new TextureObject(Raylib.LoadTexture("./sprites/CONTINUE BTN.png"), renderer);
@@ -286,19 +306,20 @@ namespace ConsoleApp1
                     GameOverMenuButtons[1] = new TextureObject(Raylib.LoadTexture("./sprites/EXIT TO TITLE.png"), renderer);
                     EndSprite = new TextureObject(Raylib.LoadTexture("./sprites/YouWon.png"), renderer);
                     break;
-
-                case 4: // Fonts
+                case 4:
                     status.Title = "Loading Fonts...";
                     GameFont = Raylib.LoadFontEx("./fonts/comic.ttf", 35, null, 0);
                     break;
-
-                case 5: // Misc
+                case 5:
+                    status.Title = "Loading Enemy Textures...";
+                    EnemyTextures.Load(renderer);
+                    break;
+                case 6:
                     status.Title = "Finalizing...";
                     SlideItem[0] = new TextureObject(Raylib.LoadTexture("./sprites/FiledPlate.png"), renderer);
                     SlideItem[1] = new TextureObject(Raylib.LoadTexture("./sprites/CupCake.png"), renderer);
                     SantaClaus.Load(renderer);
                     break;
-
                 default:
                     status.Title = "Done";
                     status.IsFinished = true;
@@ -312,10 +333,6 @@ namespace ConsoleApp1
             if (_loadingStep >= TotalSteps)
             {
                 status.IsFinished = true;
-            }
-            else
-            {
-                status.IsFinished = false;
             }
 
             return status;
