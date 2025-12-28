@@ -43,6 +43,35 @@ namespace ConsoleApp1
         public int jumper_X = -1;
         public Vec2D JumperSpawnPoint = new Vec2D(-1, -1);
         public Line2D JumperCollisionLine = new Line2D(new Vec2D(-1, -1), new Vec2D(-1, 1));
+        public Graf graf;
+
+
+        public List<Line2D> generate_graf_lines(int offset)
+        {
+            List<Line2D> output = new List<Line2D>();
+            foreach(Platform platform in platforms)
+            {
+                if (platform.collison_lines[0] == null) continue;
+                Line2D new_line=new Line2D(new Vec2D(platform.collison_lines[0].Start.X,platform.collison_lines[0].Start.Y-offset),new Vec2D(platform.collison_lines[0].End.X,platform.collison_lines[0].End.Y-offset));
+                output.Add(new_line);
+            }
+
+            foreach (ConveyerBelt conveyerBelt in conveyerBelts)
+            {
+                if(!conveyerBelt.is_active) continue;
+                int y = (int)conveyerBelt.rect.Pos.Y-offset;
+                Line2D line= new Line2D(new Vec2D(conveyerBelt.rect.Pos.X, y),
+                    new Vec2D(conveyerBelt.rect.Pos.X + conveyerBelt.rect.Size.X, y));
+                output.Add(line);
+            }
+
+            foreach (Stairs stair in stairs)
+            {
+                if(!stair.active)continue;
+                output.Add(stair.get_graf_line(output, offset));
+            }
+            return output;
+        }
 
         public Level(int ID)
         {
@@ -252,6 +281,7 @@ namespace ConsoleApp1
 
             Frame[0] = new Line2D(new Vec2D(0, 0), new Vec2D(0, 1100));
             Frame[1] = new Line2D(new Vec2D(1333, 0), new Vec2D(1333, 1100));
+            graf = new Graf(generate_graf_lines(30));
         }
 
         public void render(Game game)
@@ -283,6 +313,7 @@ namespace ConsoleApp1
 
             Raylib.DrawCircle((int)JumperSpawnPoint.X, (int)JumperSpawnPoint.Y, 5, Color.Orange);
             Raylib.DrawLineV(new Vector2(JumperCollisionLine.Start.X, JumperCollisionLine.Start.Y), new Vector2(JumperCollisionLine.End.X, JumperCollisionLine.End.Y), Color.Green);
+            this.graf.render();
 #endif
         }
         public bool is_level_end(Game game)

@@ -16,7 +16,7 @@ namespace ConsoleApp1
         Vec2D start;
         Vec2D size;
         public Line2D[] collison_lines = new Line2D[4];
-
+        
         public Platform(bool is_empty, int width_segments, Vec2D pos, int offset, int id)
         {
             this.is_empty = is_empty; 

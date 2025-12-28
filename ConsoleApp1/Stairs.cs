@@ -13,7 +13,7 @@ namespace ConsoleApp1
         int height;
         Vec2D pos;
         bool is_empty = false;
-        bool active = true;
+        public bool active = true;
         Rect2D rect;
         Rect2D GoDownWindowRect;
         public Vec2D[] StartAndEnd;
@@ -21,6 +21,26 @@ namespace ConsoleApp1
         Platform[] platforms;
         ConveyerBelt[] belts;
 
+        public Line2D get_graf_line(List<Line2D> platform_lines,int offset)
+        {
+            int x = get_center_x();
+            float top_y = -9999;
+            float bottom_y = 9999;
+            Line2D test_line = getLine();
+            foreach (Line2D line in platform_lines)
+            {
+                Vec2D point=line.GetIntersectionPoint(test_line);
+                if (point != null)
+                {
+                    float y = point.Y;
+                    if (top_y < y)
+                        top_y = y;
+                    if (bottom_y > y)
+                        bottom_y = y;
+                }
+            }
+            return new Line2D(new Vec2D(x, top_y), new Vec2D(x, bottom_y));
+        }
         public Stairs(int x, int y, int h, bool is_empty, bool active, int id, Platform[] level_data, ConveyerBelt[] belts)
         {
             this.active = active;

@@ -17,7 +17,7 @@ namespace ConsoleApp1
         {
             lines = GetLines();
         }
-        public Graf(Line2D[] lines)
+        public Graf(List<Line2D> lines)
         {
             foreach (var line in lines)
             {
@@ -25,7 +25,6 @@ namespace ConsoleApp1
                 GrafNode to = GetOrAddNode(line.End);
                 AddEdge(from, to);
             }
-
             update_lines();
         }
 
