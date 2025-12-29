@@ -21,7 +21,7 @@ namespace ConsoleApp1
         Platform[] platforms;
         ConveyerBelt[] belts;
 
-        public Line2D get_graf_line(List<Line2D> platform_lines,int offset)
+        public Line2D get_graf_line(List<Line2D> platform_lines)
         {
             int x = get_center_x();
             float top_y = -9999;

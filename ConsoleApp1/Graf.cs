@@ -7,7 +7,8 @@ namespace ConsoleApp1
     public class Graf
     {
         public List<GrafNode> Nodes { get; set; } = new List<GrafNode>();
-        public Line2D[] lines=new Line2D[0];
+        public Line2D[] lines = new Line2D[0];
+
         public Graf()
         {
             update_lines();
@@ -17,6 +18,7 @@ namespace ConsoleApp1
         {
             lines = GetLines();
         }
+
         public Graf(List<Line2D> lines)
         {
             foreach (var line in lines)
@@ -76,7 +78,7 @@ namespace ConsoleApp1
             {
                 Vec2D start = line.Start;
                 Vec2D end = line.End;
-                Raylib.DrawLine((int)start.X, (int)start.Y, (int)end.X, (int)end.Y,Color.Red);
+                Raylib.DrawLine((int)start.X, (int)start.Y, (int)end.X, (int)end.Y, Color.Red);
             }
 
             foreach (GrafNode node in Nodes)
@@ -84,6 +86,94 @@ namespace ConsoleApp1
                 Vec2D point = node.Point;
                 Raylib.DrawCircle((int)point.X, (int)point.Y, 10, Color.Green);
             }
+        }
+
+        public int[] GeneratePath(int startNodeIndex, int endNodeIndex)
+        {
+            if (startNodeIndex < 0 || startNodeIndex >= Nodes.Count || endNodeIndex < 0 || endNodeIndex >= Nodes.Count)
+            {
+                return new int[0];
+            }
+
+            Dictionary<GrafNode, int> nodeIndices = new Dictionary<GrafNode, int>();
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                nodeIndices[Nodes[i]] = i;
+            }
+
+            int count = Nodes.Count;
+            float[] distances = new float[count];
+            int[] previous = new int[count];
+            List<int> unvisited = new List<int>();
+
+            for (int i = 0; i < count; i++)
+            {
+                distances[i] = float.MaxValue;
+                previous[i] = -1;
+                unvisited.Add(i);
+            }
+
+            distances[startNodeIndex] = 0;
+
+            while (unvisited.Count > 0)
+            {
+                int u = -1;
+                float minDist = float.MaxValue;
+
+                foreach (int i in unvisited)
+                {
+                    if (distances[i] < minDist)
+                    {
+                        minDist = distances[i];
+                        u = i;
+                    }
+                }
+
+                if (u == -1 || u == endNodeIndex)
+                {
+                    break;
+                }
+
+                unvisited.Remove(u);
+
+                GrafNode uNode = Nodes[u];
+                foreach (GrafNode neighbor in uNode.Connections)
+                {
+                    if (nodeIndices.TryGetValue(neighbor, out int v))
+                    {
+                        if (unvisited.Contains(v))
+                        {
+                            float dx = uNode.Point.X - neighbor.Point.X;
+                            float dy = uNode.Point.Y - neighbor.Point.Y;
+                            float weight = (float)Math.Sqrt(dx * dx + dy * dy);
+
+                            float alt = distances[u] + weight;
+                            if (alt < distances[v])
+                            {
+                                distances[v] = alt;
+                                previous[v] = u;
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<int> path = new List<int>();
+            int current = endNodeIndex;
+
+            if (previous[current] == -1 && current != startNodeIndex)
+            {
+                return new int[0];
+            }
+
+            while (current != -1)
+            {
+                path.Add(current);
+                current = previous[current];
+            }
+
+            path.Reverse();
+            return path.ToArray();
         }
     }
 
