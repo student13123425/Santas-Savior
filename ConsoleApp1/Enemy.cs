@@ -13,7 +13,7 @@ namespace ConsoleApp1
         Rect2D rectangle;
         float movement_speed = 300f;
         int height = 60;
-        
+        private Vec2D render_base_point;
         public Enemy(Graf graf, Vec2D spawn_position)
         {
             current_node = get_cloasest_node(graf, spawn_position);
@@ -23,7 +23,7 @@ namespace ConsoleApp1
 
         bool get_movement_side(Graf graf)
         {
-            return graf.Nodes[current_node].Point.X >= graf.Nodes[next_node].Point.X;
+            return graf.Nodes[current_node].Point.X < graf.Nodes[next_node].Point.X;
         }
         void update_rect2D(Graf graf)
         {
@@ -33,6 +33,7 @@ namespace ConsoleApp1
             Vec2D Size = new Vec2D(width, height);
             Vec2D Position = new Vec2D(point.X - Size.X / 2, point.Y);
             rectangle = new Rect2D(Position, Size);
+            render_base_point = point;
         }
 
         float distance_in_between_movement_nodes(Graf graf)
@@ -58,13 +59,27 @@ namespace ConsoleApp1
             return min_node_index;
         }
 
-        public void render(Graf graf)
-        {
+        public void render(Game game)
+        {   
+            bool draw_side = get_movement_side(game.levels[game.current_level_id].graf);
+            if (is_alive && !isDying)
+            {
+                TextureObject texture=game.GlobalTextures.EnemyTextures.walk_animation.GetCurrentTexture();
+                game.GlobalTextures.renderer.DrawTextureBottomCenter(texture.Texture, height, false, render_base_point,
+                    draw_side);
+            }
+            else
+            {
+                TextureObject texture=game.GlobalTextures.EnemyTextures.explode_animation.GetCurrentTexture();
+                game.GlobalTextures.renderer.DrawTextureBottomCenter(texture.Texture, height, false, render_base_point,
+                    draw_side);
+            }
 #if DEBUG
             Raylib.DrawRectangleLines((int)rectangle.Pos.X, (int)rectangle.Pos.Y, (int)rectangle.Size.X, (int)rectangle.Size.Y, Color.Red);
 #endif
+            
+            
         }
-
         public void Update(Game game)
         {
             update_rect2D(game.levels[game.current_level_id].graf);
