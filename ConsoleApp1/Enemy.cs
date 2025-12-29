@@ -91,6 +91,7 @@ namespace ConsoleApp1
         {
             if (force_path_update)
                 path=get_path(game);
+            update_animation(game);
             update_rect2D(game.levels[game.current_level_id].graf);
         }
     }
