@@ -30,8 +30,8 @@ namespace ConsoleApp1
         public Rect2D stair_collision_rect;
         int climbing_star_index = -1;
         Timer step_delay_timer;
-        public bool IsJumping = false;
-
+        public bool IsJumping = false; 
+        public int closest_graf_node = 0;
         public Player(Vec2D pos)
         {
             this.pos = new Vec2D(pos.X, pos.Y - 4);
@@ -39,6 +39,10 @@ namespace ConsoleApp1
             this.update_rects();
         }
 
+        public void updateClosestGrafNode(Game game)
+        {
+            this.closest_graf_node=game.levels[game.current_level_id].graf.get_cloasest_node(this.pos);
+        }
         public int GetHealth() { return health; }
         public void SetHealth(int h) { health = h; }
 
@@ -314,6 +318,7 @@ namespace ConsoleApp1
 
         public void update(Level level, Game instance)
         {
+            updateClosestGrafNode(instance);
             if (IsDying)
             {
                 bool animFinished = instance.GlobalTextures.PlayerTextures.death_animation.Update();

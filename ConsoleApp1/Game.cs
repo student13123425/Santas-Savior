@@ -27,7 +27,6 @@ namespace ConsoleApp1
         public SaveData SaveFile;
         public SantaClaus SantaClaus;
         public Jumper[] Jumpers = new Jumper[99999];
-
         public Game()
         {
             levels[0] = new Level(0);

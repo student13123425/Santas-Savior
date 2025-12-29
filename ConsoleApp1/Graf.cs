@@ -29,7 +29,23 @@ namespace ConsoleApp1
             }
             update_lines();
         }
-
+        public int get_cloasest_node(Vec2D point)
+        {
+            float min_value = 9999;
+            int index = 0;
+            int min_node_index = 0;
+            foreach (GrafNode node in Nodes)
+            {
+                float value = node.Point.DistanceTo(point);
+                if (value < min_value)
+                {
+                    min_value = value;
+                    min_node_index = index;
+                }
+                index++;
+            }
+            return min_node_index;
+        }
         private GrafNode GetOrAddNode(Vec2D point)
         {
             foreach (var node in Nodes)
