@@ -21,6 +21,13 @@ namespace ConsoleApp1
         public static float Dot(Vec2D a, Vec2D b) => a.X * b.X + a.Y * b.Y;
         public static float Cross(Vec2D a, Vec2D b) => a.X * b.Y - a.Y * b.X;
 
+        public float DistanceTo(Vec2D other)
+        {
+            float dx = X - other.X;
+            float dy = Y - other.Y;
+            return (float)Math.Sqrt(dx * dx + dy * dy);
+        }
+
         public bool CollideWith(Vec2D other)
         {
             return Math.Abs(X - other.X) <= EPS && Math.Abs(Y - other.Y) <= EPS;
@@ -48,7 +55,7 @@ namespace ConsoleApp1
 
         public bool IsNull()
         {
-            return (int)X == -1&&(int)Y == -1;
+            return (int)X == -1 && (int)Y == -1;
         }
     }
 
@@ -214,6 +221,11 @@ namespace ConsoleApp1
             float angle = (float)(Math.Atan2(dy, dx) * 180.0 / Math.PI);
             if (angle < 0) angle += 360f;
             return angle;
+        }
+
+        public Vec2D Interpolate(float t)
+        {
+            return Start + (End - Start) * t;
         }
         public override string ToString() => $"Line2D(Start={Start}, End={End})";
     }
