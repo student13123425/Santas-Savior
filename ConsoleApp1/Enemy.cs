@@ -33,7 +33,6 @@ namespace ConsoleApp1
         {
             return graf.Nodes[current_node].Point.X < graf.Nodes[next_node].Point.X;
         }
-
         void update_rect2D(Graf graf)
         {
             Line2D line = new Line2D(graf.Nodes[current_node].Point, graf.Nodes[next_node].Point);
@@ -65,6 +64,19 @@ namespace ConsoleApp1
                 next_path_step(game);
         }
 
+        public bool IsClimbing(Game game)
+        {
+            try
+            {
+                int x1 = (int)game.levels[game.current_level_id].graf.Nodes[current_node].Point.X;
+                int x2 = (int)game.levels[game.current_level_id].graf.Nodes[next_node].Point.X;
+                return x1 == x2;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         void process_posible_exlosion(Game game)
         {   if (isDying)
                 return;
@@ -96,6 +108,8 @@ namespace ConsoleApp1
             if (is_alive && !isDying)
             {
                 TextureObject texture = game.GlobalTextures.EnemyTextures.walk_animation.GetCurrentTexture();
+                if(IsClimbing(game))
+                    texture = game.GlobalTextures.EnemyTextures.climb_animation.GetCurrentTexture();
                 game.GlobalTextures.renderer.DrawTextureBottomCenter(texture.Texture, height, false, render_base_point, draw_side);
             }
             else
