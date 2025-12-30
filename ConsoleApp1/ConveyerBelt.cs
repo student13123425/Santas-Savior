@@ -144,5 +144,25 @@ namespace ConsoleApp1
             foreach (ConveyerItem item in items)
                 item.update(game, (int)s, this.end_points);
         }
+
+        public Line2D[] get_line_segments(int n)
+        {
+            if (!is_active || n <= 0) return new Line2D[0];
+
+            Line2D topLine = new Line2D(new Vec2D(rect.Left, rect.Top), new Vec2D(rect.Right, rect.Top));
+            Line2D[] segments = new Line2D[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                float t1 = (float)i / n;
+                float t2 = (float)(i + 1) / n;
+
+                Vec2D p1 = topLine.Interpolate(t1);
+                Vec2D p2 = topLine.Interpolate(t2);
+
+                segments[i] = new Line2D(p1, p2);
+            }
+            return segments;
+        }
     }
 }

@@ -68,6 +68,7 @@ namespace ConsoleApp1
         void next_path_step(Game game)
         {
             interpolation = 0;
+            
         }
         public void render(Game game)
         {

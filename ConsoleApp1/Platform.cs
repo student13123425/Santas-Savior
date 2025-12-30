@@ -101,5 +101,25 @@ namespace ConsoleApp1
             }
 #endif
         }
+
+        public Line2D[] get_line_segments(int n)
+        {
+            if (is_empty || n <= 0) return new Line2D[0];
+
+            Line2D topLine = collison_lines[0];
+            Line2D[] segments = new Line2D[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                float t1 = (float)i / n;
+                float t2 = (float)(i + 1) / n;
+
+                Vec2D p1 = topLine.Interpolate(t1);
+                Vec2D p2 = topLine.Interpolate(t2);
+
+                segments[i] = new Line2D(p1, p2);
+            }
+            return segments;
+        }
     }
 }
