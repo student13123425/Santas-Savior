@@ -65,10 +65,19 @@ namespace ConsoleApp1
                 next_path_step(game);
         }
 
+        void process_posible_exlosion(Game game)
+        {   if (isDying)
+                return;
+            if (game.player.is_hit(rectangle,game))
+            {
+                is_alive = false;
+                isDying = true;
+                game.GlobalTextures.EnemyTextures.explode_animation.Play(false);
+            }
+        }
         void next_path_step(Game game)
         {
             interpolation = 0;
-            
         }
         public void render(Game game)
         {
@@ -92,6 +101,7 @@ namespace ConsoleApp1
         {
             if (force_path_update)
                 path=get_path(game);
+            process_posible_exlosion(game);
             update_animation(game);
             update_rect2D(game.levels[game.current_level_id].graf);
         }
