@@ -96,7 +96,6 @@ namespace ConsoleApp1
                 Vec2D end = line.End;
                 Raylib.DrawLine((int)start.X, (int)start.Y, (int)end.X, (int)end.Y, Color.Red);
             }
-
             foreach (GrafNode node in Nodes)
             {
                 Vec2D point = node.Point;

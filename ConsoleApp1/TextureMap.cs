@@ -8,7 +8,7 @@ namespace ConsoleApp1
     {
         public AnimationPlayer walk_animation;
         public AnimationPlayer explode_animation;
-
+        public AnimationPlayer climb_animation;
         public void Load(TextureRenderer renderer)
         {
             walk_animation = new AnimationPlayer([
@@ -23,6 +23,11 @@ namespace ConsoleApp1
                 new TextureObject(Raylib.LoadTexture("./sprites/EnemyExplode2.png"), renderer),
                 new TextureObject(Raylib.LoadTexture("./sprites/EnemyExplode3.png"), renderer),
             ], 0.25f, false);
+            climb_animation = new AnimationPlayer(
+                [new TextureObject(Raylib.LoadTexture("./sprites/EnemyClimb1.png"), renderer),
+                new TextureObject(Raylib.LoadTexture("./sprites/EnemyClimb2.png"), renderer)],
+                0.2f,true);
+            climb_animation.Play();
         }
     }
     public class SantaClausTextureMap
@@ -268,7 +273,6 @@ namespace ConsoleApp1
         {
             LoadingStatus status = new LoadingStatus();
             status.IsFinished = false;
-
             switch (_loadingStep)
             {
                 case 0:
