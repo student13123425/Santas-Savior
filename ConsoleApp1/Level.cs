@@ -52,19 +52,18 @@ namespace ConsoleApp1
             foreach(Platform platform in platforms)
             {
                 if (platform.collison_lines[0] == null) continue;
-                Line2D new_line=new Line2D(new Vec2D(platform.collison_lines[0].Start.X,platform.collison_lines[0].Start.Y),new Vec2D(platform.collison_lines[0].End.X,platform.collison_lines[0].End.Y));
-                output.Add(new_line);
+                Line2D[] lines = platform.get_line_segments(15);
+                foreach (Line2D line in lines)
+                  output.Add(line);  
             }
 
             foreach (ConveyerBelt conveyerBelt in conveyerBelts)
             {
                 if(!conveyerBelt.is_active) continue;
-                int y = (int)conveyerBelt.rect.Pos.Y;
-                Line2D line= new Line2D(new Vec2D(conveyerBelt.rect.Pos.X, y),
-                    new Vec2D(conveyerBelt.rect.Pos.X + conveyerBelt.rect.Size.X, y));
-                output.Add(line);
+                Line2D[] lines = conveyerBelt.get_line_segments(15);
+                foreach (Line2D line in lines)
+                    output.Add(line);  
             }
-
             foreach (Stairs stair in stairs)
             {
                 if(!stair.active)continue;

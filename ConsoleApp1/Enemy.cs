@@ -77,6 +77,17 @@ namespace ConsoleApp1
         }
         void next_path_step(Game game)
         {
+            current_node=next_node;
+            bool is_last_current = false;
+            foreach (int v in path)
+            {
+                if (is_last_current)
+                {
+                    next_node = v;
+                    break;
+                }
+                is_last_current = v==current_node;
+            }
             interpolation = 0;
         }
         public void render(Game game)
