@@ -27,6 +27,7 @@ namespace ConsoleApp1
         public SaveData SaveFile;
         public SantaClaus SantaClaus;
         public Jumper[] Jumpers = new Jumper[99999];
+        public List<Enemy> Robots = new List<Enemy>();
         public Game()
         {
             levels[0] = new Level(0);
@@ -49,7 +50,7 @@ namespace ConsoleApp1
         {
             if (is_game_over)
             {
-                this.GameOverMenu.render(this);
+                GameOverMenu.render(this);
             }
             else if (current_level_id == -1)
             {
@@ -69,13 +70,14 @@ namespace ConsoleApp1
                 render_drops();
             }
         }
-
         void render_enemys()
         {
             for (int i = 0; i < this.barels.Length; i++)
                 this.barels[i].render(this);
             for (int i = 0; i < this.Jumpers.Length; i++)
                 this.Jumpers[i].render(this);
+            for (int i = 0; i < this.Robots.Count; i++)
+                this.Robots[i].render(this);
         }
         void render_drops()
         {
@@ -140,6 +142,8 @@ namespace ConsoleApp1
                 this.barels[i].update(level);
             for (int i = 0; i < this.Jumpers.Length; i++)
                 this.Jumpers[i].update(this);
+            for (int i = 0; i < this.Robots.Count; i++)
+                this.Robots[i].Update(this,true);
         }
         void update_drops()
         {
