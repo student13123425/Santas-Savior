@@ -12,11 +12,16 @@ namespace ConsoleApp1
     {
         Rect2D rect;
         Rect2D fireHitbox;
+        private Timer timer = null;
+        private Timer start_delay_timer = null;
         bool is_empty = false;
         bool is_active = true;
         bool is_to_spawn = false;
         bool is_spawn_on_barrel = false;
-        public OilBarel(Vec2D pos, bool e,int spawn_mode, bool isActive = true)
+        private const float timer_duration = 0.7f;
+        private const float initial_spawn_delay = 2.0f;
+
+        public OilBarel(Vec2D pos, bool e, int spawn_mode, bool isActive = true)
         {
             Vec2D size = new Vec2D(69, 80);
             this.is_empty = e;
@@ -35,7 +40,7 @@ namespace ConsoleApp1
                 is_to_spawn = true;
                 is_spawn_on_barrel = false;
             }
-            else if(spawn_mode == 2)
+            else if (spawn_mode == 2)
             {
                 is_to_spawn = true;
                 is_spawn_on_barrel = true;
@@ -49,7 +54,7 @@ namespace ConsoleApp1
             int output = -1;
             float dist = 99999;
             int index = 0;
-            foreach (GrafNode node  in game.levels[game.current_level_id].graf.Nodes)
+            foreach (GrafNode node in game.levels[game.current_level_id].graf.Nodes)
             {
                 float local_dist = center.DistanceTo(node.Point);
                 if (local_dist < dist)
@@ -59,18 +64,68 @@ namespace ConsoleApp1
                 }
                 index += 1;
             }
-            return -1;
+            return output;
         }
 
+        public void process_enemy_spawn(Game game)
+        {
+            if (!this.is_to_spawn)
+                return;
+
+            if (!is_spawn_on_barrel)
+            {
+                if (start_delay_timer == null)
+                {
+                    start_delay_timer = new Timer(initial_spawn_delay, false);
+                    start_delay_timer.Play();
+                }
+
+                if (start_delay_timer.IsPlaying)
+                {
+                    if (!start_delay_timer.Update())
+                    {
+                        return; 
+                    }
+                }
+
+                if (timer == null)
+                {
+                    timer = new Timer(timer_duration, false);
+                    timer.Play();
+                }
+                else if (timer != null)
+                {
+                    bool is_finished = timer.Update();
+                    if (is_finished)
+                    {
+                        spawn_enemy(game);
+                    }
+                }
+            }
+            else
+            {
+                foreach (Barel barel in game.barels)
+                {
+                    if (IsColide(barel.circle) && barel.is_active)
+                    {
+                        barel.deactivate();
+                        spawn_enemy(game);
+                    }
+                }
+            }
+        }
         public void spawn_enemy(Game game)
         {
             int spawn_point_id = get_closest_spawn_point_id(game);
-            game.Robots.Add(new Enemy(game, game.levels[game.current_level_id].graf.Nodes[spawn_point_id].Point));
+            if (spawn_point_id != -1)
+            {
+                game.Robots.Add(new Enemy(game, game.levels[game.current_level_id].graf.Nodes[spawn_point_id].Point));
+            }
+            timer = null;
         }
         public bool IsColide(Circle c)
         {
             if (!is_active) return false;
-
             return this.rect.CollideWith(c) || this.fireHitbox.CollideWith(c);
         }
         public void render(Game game, bool showDebug = true)
@@ -83,8 +138,8 @@ namespace ConsoleApp1
             float centerX = rect.Pos.X + (rect.Size.X / 2.0f);
             float bottomY = rect.Pos.Y + rect.Size.Y;
             Vec2D bottomCenterPos = new Vec2D(centerX, bottomY);
-            
-            texture.DrawBottomCenter(rect.Size.Y+20, false, bottomCenterPos);
+
+            texture.DrawBottomCenter(rect.Size.Y + 20, false, bottomCenterPos);
 
             if (showDebug)
             {
@@ -104,6 +159,7 @@ namespace ConsoleApp1
                     Color.Orange
                 );
             }
+            process_enemy_spawn(game);
         }
     }
 }
