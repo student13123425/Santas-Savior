@@ -61,6 +61,12 @@ namespace ConsoleApp1
             }
             return -1;
         }
+
+        public void spawn_enemy(Game game)
+        {
+            int spawn_point_id = get_closest_spawn_point_id(game);
+            game.Robots.Add(new Enemy(game, game.levels[game.current_level_id].graf.Nodes[spawn_point_id].Point));
+        }
         public bool IsColide(Circle c)
         {
             if (!is_active) return false;
