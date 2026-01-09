@@ -50,7 +50,7 @@ namespace ConsoleApp1
         {
             foreach (var node in Nodes)
             {
-                if ((int)node.Point.X == (int)point.X && (int)node.Point.Y == (int)point.Y)
+                if (node.Point.DistanceTo(point) < 2.0f)
                 {
                     return node;
                 }
@@ -70,9 +70,10 @@ namespace ConsoleApp1
             if (Nodes.Contains(from) && Nodes.Contains(to))
             {
                 from.AddConnection(to);
+                to.AddConnection(from);
             }
-
-            update_lines();
+            
+            update_lines(); 
         }
 
         public Line2D[] GetLines()
@@ -99,7 +100,7 @@ namespace ConsoleApp1
             foreach (GrafNode node in Nodes)
             {
                 Vec2D point = node.Point;
-                Raylib.DrawCircle((int)point.X, (int)point.Y, 10, Color.Green);
+                Raylib.DrawCircle((int)point.X, (int)point.Y, 5, Color.Green);
             }
         }
 
@@ -156,7 +157,7 @@ namespace ConsoleApp1
                 {
                     if (nodeIndices.TryGetValue(neighbor, out int v))
                     {
-                        if (unvisited.Contains(v))
+                        if (unvisited.Contains(v)) 
                         {
                             float dx = uNode.Point.X - neighbor.Point.X;
                             float dy = uNode.Point.Y - neighbor.Point.Y;

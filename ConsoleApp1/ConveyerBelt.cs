@@ -38,6 +38,12 @@ namespace ConsoleApp1
             this.is_active = is_active;
             this.forced_stop = forced_stop;
 
+            // FIX: Calculate bounds immediately in constructor so Graph generation works
+            // Assuming width is roughly: (StartCap + TileCount + EndCap) * Height
+            // This ensures rect is valid before the first Render call
+            float estimatedTotalWidth = (tile_count + 2) * height; // +2 for the end caps
+            CalculateBounds(estimatedTotalWidth);
+
             if (forced_stop)
             {
                 items = new ConveyerItem[0];
@@ -89,6 +95,7 @@ namespace ConsoleApp1
 
             float totalWidth = currentXOffset + endWidth;
 
+            // Recalculate with exact texture width during render to be precise
             CalculateBounds(totalWidth);
 
             if (is_first_update)

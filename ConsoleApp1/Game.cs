@@ -95,6 +95,8 @@ namespace ConsoleApp1
 
             this.player = new Player(new Vec2D(this.levels[current_level_id].player_start_pos.X, this.levels[current_level_id].player_start_pos.Y));
             this.donkey_kong = new Golumn(levels[current_level_id]); 
+            
+            this.Robots.Clear(); // Clear robots on reset
 
             this.barels = new Barel[99999];
             for (int i = 0; i < this.barels.Length; i++)
@@ -166,6 +168,9 @@ namespace ConsoleApp1
             this.current_level_id = current_level_id;
             this.player = new Player(new Vec2D(this.levels[current_level_id].player_start_pos.X, this.levels[current_level_id].player_start_pos.Y));
             this.donkey_kong = new Golumn(levels[current_level_id]); 
+            
+            this.Robots.Clear(); // Clear robots on start level
+
             this.barels = new Barel[99999];
             for (int i = 0; i < this.barels.Length; i++)
                 this.barels[i] = new Barel(levels[current_level_id].barel_spawn_point, false);
