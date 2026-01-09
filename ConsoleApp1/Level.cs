@@ -49,10 +49,12 @@ namespace ConsoleApp1
         public List<Line2D> generate_graf_lines()
         {
             List<Line2D> output = new List<Line2D>();
+            int segmentSize = 5; // Defined as 5px
+
             foreach(Platform platform in platforms)
             {
                 if (platform.collison_lines[0] == null) continue;
-                Line2D[] lines = platform.get_line_segments(15);
+                Line2D[] lines = platform.get_line_segments(segmentSize);
                 foreach (Line2D line in lines)
                   output.Add(line);  
             }
@@ -60,14 +62,16 @@ namespace ConsoleApp1
             foreach (ConveyerBelt conveyerBelt in conveyerBelts)
             {
                 if(!conveyerBelt.is_active) continue;
-                Line2D[] lines = conveyerBelt.get_line_segments(15);
+                Line2D[] lines = conveyerBelt.get_line_segments(segmentSize);
                 foreach (Line2D line in lines)
                     output.Add(line);  
             }
             foreach (Stairs stair in stairs)
             {
                 if(!stair.active)continue;
-                output.Add(stair.get_graf_line(output));
+                Line2D[] lines = stair.get_line_segments(output, segmentSize);
+                foreach (Line2D line in lines)
+                    output.Add(line);
             }
             return output;
         }

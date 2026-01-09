@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using Raylib_cs;
 
 namespace ConsoleApp1
 {
     public class Enemy
     {
-        public static Enemy HuntingEnemy = null; // Track who is currently hunting
-
+        public static Enemy HuntingEnemy = null;
+        private static double last_update_time = 0;
         bool is_alive = true;
         bool isDying = false;
         int current_node = 0;
         int next_node = 0;
         float interpolation = 0;
         Rect2D rectangle;
-        float movement_speed = 240f;
+        float movement_speed = 90f;
         int height = 60;
         Vec2D render_base_point;
         private int[] path = new int[0];
@@ -45,17 +46,40 @@ namespace ConsoleApp1
             else
             {
                 int start_index = next_node;
-                int count = game.levels[game.current_level_id].graf.Nodes.Count;
+                var graf = game.levels[game.current_level_id].graf;
+                int count = graf.Nodes.Count;
                 if (count == 0) return new int[0];
-                int end_index = Utils.GetRandomInt(0, count - 1);
-                return game.levels[game.current_level_id].graf.GeneratePath(start_index, end_index);
+
+                Vec2D startPos = graf.Nodes[start_index].Point;
+                List<int> validTargets = new List<int>();
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (i == start_index) continue;
+                    if (startPos.DistanceTo(graf.Nodes[i].Point) >= 300f)
+                    {
+                        validTargets.Add(i);
+                    }
+                }
+
+                int end_index;
+                if (validTargets.Count > 0)
+                {
+                    end_index = validTargets[Utils.GetRandomInt(0, validTargets.Count - 1)];
+                }
+                else
+                {
+                    end_index = Utils.GetRandomInt(0, count - 1);
+                }
+
+                return graf.GeneratePath(start_index, end_index);
             }
         }
 
         bool get_movement_side(Graf graf)
         {
             if (graf.Nodes.Count <= next_node || graf.Nodes.Count <= current_node) return false;
-            return graf.Nodes[current_node].Point.X < graf.Nodes[next_node].Point.X;
+            return graf.Nodes[current_node].Point.X > graf.Nodes[next_node].Point.X;
         }
 
         void update_rect2D(Graf graf)
@@ -116,6 +140,7 @@ namespace ConsoleApp1
                 is_alive = false;
                 isDying = true;
                 game.GlobalTextures.EnemyTextures.explode_animation.Play(false);
+
                 if (is_hunter)
                 {
                     HuntingEnemy = null;
@@ -197,7 +222,19 @@ namespace ConsoleApp1
             {
                 HuntingEnemy = this;
                 is_hunter = true;
-                force_path_update = true; // Recalculate to target player
+                force_path_update = true; 
+            }
+
+            double currentTime = Raylib.GetTime();
+            if (currentTime > last_update_time)
+            {
+                game.GlobalTextures.EnemyTextures.walk_animation.Play(false);
+                game.GlobalTextures.EnemyTextures.walk_animation.Update();
+                
+                game.GlobalTextures.EnemyTextures.climb_animation.Play(false);
+                game.GlobalTextures.EnemyTextures.climb_animation.Update();
+                
+                last_update_time = currentTime;
             }
 
             if (force_path_update)

@@ -27,7 +27,7 @@ namespace ConsoleApp1
             size = new Vec2D(93, 40);
 
             if (this.is_empty || width_segments <= 0) return;
-
+            
             const float TILE_W = 93f;
             const float TILE_H = 40f;
             
@@ -86,7 +86,7 @@ namespace ConsoleApp1
 
             for (int i = 0; i < width; i++)
             {
-                float x = start.X + i * 93;
+                float x = start.X + i * 93; 
                 float y = start.Y - offset_per_interation * i;
 
                 Rect2D tileRect = new Rect2D(x, y, 93, 40);
@@ -95,18 +95,28 @@ namespace ConsoleApp1
             }
 
 #if DEBUG
-            for (int i = 0; i < 4; i++)
+            if (collison_lines != null && collison_lines[0] != null)
             {
-                Raylib.DrawLine((int)collison_lines[i].Start.X, (int)collison_lines[i].Start.Y, (int)collison_lines[i].End.X, (int)collison_lines[i].End.Y, Color.SkyBlue);
+                for (int i = 0; i < 4; i++)
+                {
+                    Raylib.DrawLine((int)collison_lines[i].Start.X, (int)collison_lines[i].Start.Y, (int)collison_lines[i].End.X, (int)collison_lines[i].End.Y, Color.SkyBlue);
+                }
             }
 #endif
         }
 
-        public Line2D[] get_line_segments(int n)
+        public Line2D[] get_line_segments(int segment_len)
         {
-            if (is_empty || n <= 0) return new Line2D[0];
+            if (is_empty || segment_len <= 0) return new Line2D[0];
 
             Line2D topLine = collison_lines[0];
+            
+            float totalLen = (topLine.End - topLine.Start).Length;
+            
+            int n = (int)(totalLen / segment_len);
+
+            if (n <= 0) return new Line2D[] { topLine };
+
             Line2D[] segments = new Line2D[n];
 
             for (int i = 0; i < n; i++)

@@ -28,6 +28,7 @@ namespace ConsoleApp1
         {
             forced_stop = true;
         }
+        
         public ConveyerBelt(Vec2D pos, int tile_count, bool side, int items_count, int item_end_points_offset, bool is_active = true, int height = 40, bool forced_stop = false)
         {
             this.pos = pos;
@@ -38,10 +39,7 @@ namespace ConsoleApp1
             this.is_active = is_active;
             this.forced_stop = forced_stop;
 
-            // FIX: Calculate bounds immediately in constructor so Graph generation works
-            // Assuming width is roughly: (StartCap + TileCount + EndCap) * Height
-            // This ensures rect is valid before the first Render call
-            float estimatedTotalWidth = (tile_count + 2) * height; // +2 for the end caps
+            float estimatedTotalWidth = (tile_count + 2) * height; 
             CalculateBounds(estimatedTotalWidth);
 
             if (forced_stop)
@@ -95,7 +93,6 @@ namespace ConsoleApp1
 
             float totalWidth = currentXOffset + endWidth;
 
-            // Recalculate with exact texture width during render to be precise
             CalculateBounds(totalWidth);
 
             if (is_first_update)
@@ -152,9 +149,13 @@ namespace ConsoleApp1
                 item.update(game, (int)s, this.end_points);
         }
 
-        public Line2D[] get_line_segments(int n)
+        public Line2D[] get_line_segments(int segment_len)
         {
-            if (!is_active || n <= 0) return new Line2D[0];
+            if (!is_active || segment_len <= 0) return new Line2D[0];
+
+            int n = (int)(rect.Size.X / segment_len);
+
+            if (n <= 0) return new Line2D[] { new Line2D(new Vec2D(rect.Left, rect.Top), new Vec2D(rect.Right, rect.Top)) };
 
             Line2D topLine = new Line2D(new Vec2D(rect.Left, rect.Top), new Vec2D(rect.Right, rect.Top));
             Line2D[] segments = new Line2D[n];

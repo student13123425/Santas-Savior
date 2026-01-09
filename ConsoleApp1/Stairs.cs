@@ -24,13 +24,9 @@ namespace ConsoleApp1
         public Line2D get_graf_line(List<Line2D> platform_lines)
         {
             int x = get_center_x();
-            // FIX: Use Min/Max tracking logic. 
-            // Min Y is the physical TOP of the screen (Highest point).
-            // Max Y is the physical BOTTOM of the screen (Lowest point).
             float min_y = 9999;
             float max_y = -9999;
             
-            // Track the specific platform lines we connect to so we can bridge them later
             Line2D min_y_line = null;
             Line2D max_y_line = null;
 
@@ -57,7 +53,6 @@ namespace ConsoleApp1
                 }
             }
 
-            // Fallback: If no platforms intersect, use the stair's own bounds
             if (!foundIntersection)
             {
                 min_y = rect.Pos.Y;
@@ -65,26 +60,21 @@ namespace ConsoleApp1
             }
             else if (min_y == max_y)
             {
-                 // If only one intersection found (e.g. only bottom connected), extend to stair top/bottom
                  if (Math.Abs(min_y - rect.Pos.Y) < Math.Abs(min_y - (rect.Pos.Y + rect.Size.Y)))
                  {
-                     // Closer to top, extend to bottom
                      max_y = rect.Pos.Y + rect.Size.Y;
-                     max_y_line = null; // We are extending into void/ground, so disconnect from the specific line reference
+                     max_y_line = null; 
                  }
                  else
                  {
-                     // Closer to bottom, extend to top
                      min_y = rect.Pos.Y;
-                     min_y_line = null; // We are extending into void/air, so disconnect
+                     min_y_line = null;
                  }
             }
 
             Vec2D stairTop = new Vec2D(x, min_y);
             Vec2D stairBottom = new Vec2D(x, max_y);
 
-            // BRIDGE GENERATION: Connect the stair nodes to the platform nodes they touch.
-            // This fixes the "stuck enemy" bug by ensuring the graph is fully connected.
             List<Line2D> bridges = new List<Line2D>();
 
             if (min_y_line != null)
@@ -99,10 +89,34 @@ namespace ConsoleApp1
                 bridges.Add(new Line2D(stairBottom, max_y_line.End));
             }
 
-            // Inject the bridges into the main list so Graf includes them
             platform_lines.AddRange(bridges);
 
             return new Line2D(stairTop, stairBottom);
+        }
+
+        public Line2D[] get_line_segments(List<Line2D> platform_lines, int segment_len)
+        {
+            if (!active || segment_len <= 0) return new Line2D[0];
+
+            Line2D mainLine = get_graf_line(platform_lines);
+            
+            float length = (float)Math.Sqrt(Math.Pow(mainLine.End.X - mainLine.Start.X, 2) + Math.Pow(mainLine.End.Y - mainLine.Start.Y, 2));
+            int n = (int)(length / segment_len);
+            
+            if (n <= 0) return new Line2D[] { mainLine };
+
+            Line2D[] segments = new Line2D[n];
+            for (int i = 0; i < n; i++)
+            {
+                float t1 = (float)i / n;
+                float t2 = (float)(i + 1) / n;
+
+                Vec2D p1 = mainLine.Interpolate(t1);
+                Vec2D p2 = mainLine.Interpolate(t2);
+
+                segments[i] = new Line2D(p1, p2);
+            }
+            return segments;
         }
 
         public Stairs(int x, int y, int h, bool is_empty, bool active, int id, Platform[] level_data, ConveyerBelt[] belts)
