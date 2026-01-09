@@ -94,7 +94,7 @@ namespace ConsoleApp1
 
             if (ID == 0)
             {
-                this.barel = new OilBarel(new Vec2D(25, 1050 - 80), false, true);
+                this.barel = new OilBarel(new Vec2D(25, 1050 - 80), false, 2, true);
                 this.is_throwing_barrels = true;
 
                 this.decorations[0] = new Decoration("./sprites/BarrelStack.png", new Vec2D(65, 300 - 80), 165, true);
@@ -133,7 +133,6 @@ namespace ConsoleApp1
             }
             else if (ID == 1)
             {
-                this.barel = new OilBarel(new Vec2D(100, 1050 - 40), true, false);
                 this.is_throwing_barrels = false;
 
                 int groundY = 1050;
@@ -153,7 +152,8 @@ namespace ConsoleApp1
                 conveyerBelts[3] = new ConveyerBelt(new Vec2D(-15, groundY - 800), 31, true, 3, 40, true, 40, true);
                 conveyerBelts[1] = new ConveyerBelt(new Vec2D(-15, groundY - 600), 14, true, 2, 25);
                 conveyerBelts[2] = new ConveyerBelt(new Vec2D(700, groundY - 600), 14, false, 2, 25);
-                this.barel = new OilBarel(new Vec2D(640, groundY - 605), false);
+                
+                this.barel = new OilBarel(new Vec2D(640, groundY - 605), false, 1, true);
 
                 platforms[1] = new Platform(false, 4, new Vec2D(250, groundY - 400), 0, ID);
                 platforms[2] = new Platform(false, 4, new Vec2D(750, groundY - 400), 0, ID);
@@ -174,7 +174,7 @@ namespace ConsoleApp1
             }
             else if (ID == 2)
             {
-                this.barel = new OilBarel(new Vec2D(0, 0), true, false);
+                this.barel = new OilBarel(new Vec2D(0, 0), true, 0, false);
                 this.is_throwing_barrels = false;
                 int ground_y = 1100 - 50;
                 this.DonkeyKongSpawnLocation = new Vec2D(150, 350);
@@ -232,7 +232,7 @@ namespace ConsoleApp1
             }
             else if (ID == 3)
             {
-                this.barel = new OilBarel(new Vec2D(0, 0), true, false);
+                this.barel = new OilBarel(new Vec2D(0, 0), true, 0, false);
                 this.is_throwing_barrels = false;
 
                 this.DonkeyKongSpawnLocation = new Vec2D(666, 250);
