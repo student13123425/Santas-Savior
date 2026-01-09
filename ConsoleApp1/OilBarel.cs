@@ -14,8 +14,9 @@ namespace ConsoleApp1
         Rect2D fireHitbox;
         bool is_empty = false;
         bool is_active = true;
-
-        public OilBarel(Vec2D pos, bool e, bool isActive = true)
+        bool is_to_spawn = false;
+        bool is_spawn_on_barrel = false;
+        public OilBarel(Vec2D pos, bool e,int spawn_mode, bool isActive = true)
         {
             Vec2D size = new Vec2D(69, 80);
             this.is_empty = e;
@@ -29,7 +30,16 @@ namespace ConsoleApp1
                 pos.X + (size.X - fireWidth) / 2,
                 pos.Y - fireHeight
             );
-
+            if (spawn_mode == 1)
+            {
+                is_to_spawn = true;
+                is_spawn_on_barrel = false;
+            }
+            else if(spawn_mode == 2)
+            {
+                is_to_spawn = true;
+                is_spawn_on_barrel = true;
+            }
             fireHitbox = new Rect2D(firePos, new Vec2D(fireWidth, fireHeight));
         }
 
@@ -39,7 +49,6 @@ namespace ConsoleApp1
 
             return this.rect.CollideWith(c) || this.fireHitbox.CollideWith(c);
         }
-
         public void render(Game game, bool showDebug = true)
         {
             if (!is_active || is_empty) return;
