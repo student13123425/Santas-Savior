@@ -43,6 +43,24 @@ namespace ConsoleApp1
             fireHitbox = new Rect2D(firePos, new Vec2D(fireWidth, fireHeight));
         }
 
+        public int get_closest_spawn_point_id(Game game)
+        {
+            Vec2D center = rect.Center;
+            int output = -1;
+            float dist = 99999;
+            int index = 0;
+            foreach (GrafNode node  in game.levels[game.current_level_id].graf.Nodes)
+            {
+                float local_dist = center.DistanceTo(node.Point);
+                if (local_dist < dist)
+                {
+                    output = index;
+                    dist = local_dist;
+                }
+                index += 1;
+            }
+            return -1;
+        }
         public bool IsColide(Circle c)
         {
             if (!is_active) return false;

@@ -71,6 +71,7 @@ namespace ConsoleApp1
         public float Top => Pos.Y;
         public float Right => Pos.X + Size.X;
         public float Bottom => Pos.Y + Size.Y;
+        public Vec2D Center => new Vec2D(Pos.X + Size.X * 0.5f, Pos.Y + Size.Y * 0.5f);
 
         public bool Contains(Vec2D p)
         {
