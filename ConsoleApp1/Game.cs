@@ -110,7 +110,6 @@ namespace ConsoleApp1
             var levelDrops = levels[current_level_id].LevelDrops;
             for (int i = 0; i < this.drops.Length; i++)
             {
-                int drop_size = 60;
                 if (i < levelDrops.Count)
                 {
                     this.drops[i] = new Drops(levelDrops[i].Pos, this.GlobalTextures, levelDrops[i].Id, true);
@@ -124,7 +123,6 @@ namespace ConsoleApp1
                 if (bp != null)
                 {
                     bp.broke = false;
-                    bp.is_active = true;
                 }
             }
             this.is_game_over = false;
@@ -197,6 +195,15 @@ namespace ConsoleApp1
                 else
                     this.drops[i] = new Drops(new Vec2D(0, 0), this.GlobalTextures, 0, false);
             }
+
+            foreach (var bp in levels[current_level_id].breakPoints)
+            {
+                if (bp != null)
+                {
+                    bp.broke = false;
+                }
+            }
+
             SantaClaus = new SantaClaus(levels[current_level_id].pricess_position);
         }
 
