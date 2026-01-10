@@ -21,7 +21,7 @@ namespace ConsoleApp1
         private const float timer_duration = 0.7f;
         private const float initial_spawn_delay = 2.0f;
         private int spawned_count = 0;
-        private const int max_spawn_count = 3;
+        private const int max_spawn_count = 15;
 
         public OilBarel(Vec2D pos, bool e, int spawn_mode, bool isActive = true)
         {
@@ -48,6 +48,13 @@ namespace ConsoleApp1
                 is_spawn_on_barrel = true;
             }
             fireHitbox = new Rect2D(firePos, new Vec2D(fireWidth, fireHeight));
+        }
+
+        public void Reset()
+        {
+            spawned_count = 0;
+            timer = null;
+            start_delay_timer = null;
         }
 
         public int get_closest_spawn_point_id(Game game)
