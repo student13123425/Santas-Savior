@@ -20,6 +20,8 @@ namespace ConsoleApp1
         bool is_spawn_on_barrel = false;
         private const float timer_duration = 0.7f;
         private const float initial_spawn_delay = 2.0f;
+        private int spawned_count = 0;
+        private const int max_spawn_count = 3;
 
         public OilBarel(Vec2D pos, bool e, int spawn_mode, bool isActive = true)
         {
@@ -74,6 +76,9 @@ namespace ConsoleApp1
 
             if (!is_spawn_on_barrel)
             {
+                if (spawned_count >= max_spawn_count)
+                    return;
+
                 if (start_delay_timer == null)
                 {
                     start_delay_timer = new Timer(initial_spawn_delay, false);
@@ -99,6 +104,7 @@ namespace ConsoleApp1
                     if (is_finished)
                     {
                         spawn_enemy(game);
+                        spawned_count++;
                     }
                 }
             }
@@ -141,7 +147,7 @@ namespace ConsoleApp1
 
             texture.DrawBottomCenter(rect.Size.Y + 20, false, bottomCenterPos);
 
-            if (showDebug)
+            if (game.is_debug)
             {
                 Raylib.DrawRectangleLines(
                     (int)rect.Pos.X,

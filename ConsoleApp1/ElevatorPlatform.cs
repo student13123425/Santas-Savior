@@ -39,15 +39,16 @@ namespace ConsoleApp1
 
             tile.DrawCenter(width, true, pos);
 
-#if DEBUG
-            Raylib.DrawRectangleLines(
-                (int)rect.Pos.X,
-                (int)rect.Pos.Y,
-                (int)rect.Size.X,
-                (int)rect.Size.Y,
-                Color.Blue
-            );
-#endif
+            if (game.is_debug)
+            {
+                Raylib.DrawRectangleLines(
+                    (int)rect.Pos.X,
+                    (int)rect.Pos.Y,
+                    (int)rect.Size.X,
+                    (int)rect.Size.Y,
+                    Color.Blue
+                );
+            }
         }
         public void update(Game game)
         {

@@ -603,13 +603,14 @@ namespace ConsoleApp1
                 textureToDraw.DrawRect(drawRect, flip);
             }
 
-#if DEBUG
-            Raylib.DrawRectangleLines((int)colision_rect.Pos.X, (int)colision_rect.Pos.Y, (int)colision_rect.Size.X, (int)colision_rect.Size.Y, Raylib_cs.Color.Green);
-            Raylib.DrawRectangleLines((int)is_on_ground_colision_rect.Pos.X, (int)is_on_ground_colision_rect.Pos.Y, (int)is_on_ground_colision_rect.Size.X, (int)is_on_ground_colision_rect.Size.Y, Raylib_cs.Color.Red);
-            Raylib.DrawRectangleLines((int)player_hit_rect.Pos.X, (int)player_hit_rect.Pos.Y, (int)player_hit_rect.Size.X, (int)player_hit_rect.Size.Y, Raylib_cs.Color.Yellow);
-            Raylib.DrawRectangleLines((int)player_hit_rect_top.Pos.X, (int)player_hit_rect_top.Pos.Y, (int)player_hit_rect_top.Size.X, (int)player_hit_rect_top.Size.Y, Raylib_cs.Color.Orange);
-            Raylib.DrawRectangleLines((int)stair_collision_rect.Pos.X, (int)stair_collision_rect.Pos.Y, (int)stair_collision_rect.Size.X, (int)stair_collision_rect.Size.Y, Raylib_cs.Color.Blue);
-#endif
+            if (game.is_debug)
+            {
+                Raylib.DrawRectangleLines((int)colision_rect.Pos.X, (int)colision_rect.Pos.Y, (int)colision_rect.Size.X, (int)colision_rect.Size.Y, Raylib_cs.Color.Green);
+                Raylib.DrawRectangleLines((int)is_on_ground_colision_rect.Pos.X, (int)is_on_ground_colision_rect.Pos.Y, (int)is_on_ground_colision_rect.Size.X, (int)is_on_ground_colision_rect.Size.Y, Raylib_cs.Color.Red);
+                Raylib.DrawRectangleLines((int)player_hit_rect.Pos.X, (int)player_hit_rect.Pos.Y, (int)player_hit_rect.Size.X, (int)player_hit_rect.Size.Y, Raylib_cs.Color.Yellow);
+                Raylib.DrawRectangleLines((int)player_hit_rect_top.Pos.X, (int)player_hit_rect_top.Pos.Y, (int)player_hit_rect_top.Size.X, (int)player_hit_rect_top.Size.Y, Raylib_cs.Color.Orange);
+                Raylib.DrawRectangleLines((int)stair_collision_rect.Pos.X, (int)stair_collision_rect.Pos.Y, (int)stair_collision_rect.Size.X, (int)stair_collision_rect.Size.Y, Raylib_cs.Color.Blue);
+            }
         }
     }
 }

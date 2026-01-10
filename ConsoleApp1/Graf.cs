@@ -8,6 +8,7 @@ namespace ConsoleApp1
     {
         public List<GrafNode> Nodes { get; set; } = new List<GrafNode>();
         public Line2D[] lines = new Line2D[0];
+        private Texture2D? nodeTexture;
 
         public Graf()
         {
@@ -29,6 +30,7 @@ namespace ConsoleApp1
             }
             update_lines();
         }
+
         public int get_cloasest_node(Vec2D point)
         {
             float min_value = 9999;
@@ -46,6 +48,7 @@ namespace ConsoleApp1
             }
             return min_node_index;
         }
+
         private GrafNode GetOrAddNode(Vec2D point)
         {
             foreach (var node in Nodes)
@@ -78,29 +81,56 @@ namespace ConsoleApp1
 
         public Line2D[] GetLines()
         {
-            List<Line2D> lines = new List<Line2D>();
+            List<Line2D> uniqueLines = new List<Line2D>();
+            HashSet<GrafNode> processed = new HashSet<GrafNode>();
+
             foreach (var node in Nodes)
             {
+                processed.Add(node);
                 foreach (var connection in node.Connections)
                 {
-                    lines.Add(new Line2D(node.Point, connection.Point));
+                    if (!processed.Contains(connection))
+                    {
+                        uniqueLines.Add(new Line2D(node.Point, connection.Point));
+                    }
                 }
             }
-            return lines.ToArray();
+            return uniqueLines.ToArray();
         }
 
-        public void render()
+        public void render(bool is_debug)
         {
+            if (!is_debug) return;
+
+            if (nodeTexture == null) 
+            {
+                Image img = Raylib.GenImageColor(10, 10, Color.Blank);
+                Raylib.ImageDrawCircle(ref img, 5, 5, 5, Color.Green);
+                nodeTexture = Raylib.LoadTextureFromImage(img);
+                Raylib.UnloadImage(img);
+            }
+
+            Rlgl.Begin(DrawMode.Lines);
+            Rlgl.Color4ub(255, 0, 0, 255);
+
             foreach (Line2D line in lines)
             {
-                Vec2D start = line.Start;
-                Vec2D end = line.End;
-                Raylib.DrawLine((int)start.X, (int)start.Y, (int)end.X, (int)end.Y, Color.Red);
+                Rlgl.Vertex2f(line.Start.X, line.Start.Y);
+                Rlgl.Vertex2f(line.End.X, line.End.Y);
             }
+            Rlgl.End();
+
             foreach (GrafNode node in Nodes)
             {
-                Vec2D point = node.Point;
-                Raylib.DrawCircle((int)point.X, (int)point.Y, 5, Color.Green);
+                Raylib.DrawTexture(nodeTexture.Value, (int)node.Point.X - 5, (int)node.Point.Y - 5, Color.White);
+            }
+        }
+
+        public void Unload()
+        {
+            if (nodeTexture != null)
+            {
+                Raylib.UnloadTexture(nodeTexture.Value);
             }
         }
 

@@ -255,19 +255,20 @@ namespace ConsoleApp1
         {
             if (is_empty) return;
 
-#if DEBUG
-            Raylib.DrawRectangleLines((int)rect.Pos.X, (int)rect.Pos.Y, (int)rect.Size.X, (int)rect.Size.Y, Color.Yellow);
-            if (StartAndEnd != null && StartAndEnd.Length >= 2)
+            if (game.is_debug)
             {
-                Raylib.DrawLine((int)StartAndEnd[0].X, (int)StartAndEnd[0].Y,
-                                (int)StartAndEnd[1].X, (int)StartAndEnd[1].Y, Color.Green);
-                Raylib.DrawCircle((int)StartAndEnd[0].X, (int)StartAndEnd[0].Y, 5, Color.Red);
-                Raylib.DrawCircle((int)StartAndEnd[1].X, (int)StartAndEnd[1].Y, 5, Color.Green);
+                Raylib.DrawRectangleLines((int)rect.Pos.X, (int)rect.Pos.Y, (int)rect.Size.X, (int)rect.Size.Y, Color.Yellow);
+                if (StartAndEnd != null && StartAndEnd.Length >= 2)
+                {
+                    Raylib.DrawLine((int)StartAndEnd[0].X, (int)StartAndEnd[0].Y,
+                                    (int)StartAndEnd[1].X, (int)StartAndEnd[1].Y, Color.Green);
+                    Raylib.DrawCircle((int)StartAndEnd[0].X, (int)StartAndEnd[0].Y, 5, Color.Red);
+                    Raylib.DrawCircle((int)StartAndEnd[1].X, (int)StartAndEnd[1].Y, 5, Color.Green);
+                }
+                Line2D scanLine = getLine();
+                Raylib.DrawLine((int)scanLine.Start.X, (int)scanLine.Start.Y,
+                              (int)scanLine.End.X, (int)scanLine.End.Y, Color.Blue);
             }
-            Line2D scanLine = getLine();
-            Raylib.DrawLine((int)scanLine.Start.X, (int)scanLine.Start.Y,
-                          (int)scanLine.End.X, (int)scanLine.End.Y, Color.Blue);
-#endif
             for (int i = 0; i < height; i++)
             {
                 Rect2D segmentRect = new Rect2D(pos.X, pos.Y - 35 * i, 47, 35);

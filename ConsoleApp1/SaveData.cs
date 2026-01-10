@@ -6,6 +6,7 @@ namespace ConsoleApp1
     public class SaveData
     {
         public int level_id;
+        public bool is_debug;
         private string save_path = "./save.data";
 
         public SaveData()
@@ -17,7 +18,8 @@ namespace ConsoleApp1
         {
             try
             {
-                File.WriteAllText(save_path, level_id.ToString());
+                string data = $"{level_id},{is_debug}";
+                File.WriteAllText(save_path, data);
             }
             catch (Exception e)
             {
@@ -32,24 +34,36 @@ namespace ConsoleApp1
                 try
                 {
                     string content = File.ReadAllText(save_path);
-                    if (int.TryParse(content, out int loaded_id))
+                    string[] parts = content.Split(',');
+
+                    if (parts.Length >= 1 && int.TryParse(parts[0], out int loaded_id))
                     {
                         level_id = loaded_id;
                     }
                     else
                     {
                         level_id = 0;
-                        Save();
+                    }
+
+                    if (parts.Length >= 2 && bool.TryParse(parts[1], out bool loaded_debug))
+                    {
+                        is_debug = loaded_debug;
+                    }
+                    else
+                    {
+                        is_debug = true; 
                     }
                 }
                 catch (Exception)
                 {
                     level_id = 0;
+                    is_debug = true;
                 }
             }
             else
             {
                 level_id = 0;
+                is_debug = true;
                 Save();
             }
             return level_id;
@@ -58,6 +72,12 @@ namespace ConsoleApp1
         public void SetLevelID(int id)
         {
             level_id = id;
+            Save();
+        }
+
+        public void SetDebug(bool debug)
+        {
+            is_debug = debug;
             Save();
         }
     }

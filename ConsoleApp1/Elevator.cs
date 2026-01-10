@@ -84,14 +84,15 @@ namespace ConsoleApp1
             top.DrawTopCenter(width, true, new Vec2D(this.center_x, this.bounds[0]));
             bottom.DrawBottomCenter(width, true, new Vec2D(this.center_x, this.bounds[1]));
 
-#if DEBUG
-            Raylib.DrawLine(this.center_x, this.bounds[0], this.center_x, this.bounds[1], Color.Red);
-            Raylib.DrawCircle(this.center_x, this.LiftEndpoint[0], 10, Color.Red);
-            Raylib.DrawCircle(this.center_x, this.LiftEndpoint[1], 10, Color.Red);
+            if (game.is_debug)
+            {
+                Raylib.DrawLine(this.center_x, this.bounds[0], this.center_x, this.bounds[1], Color.Red);
+                Raylib.DrawCircle(this.center_x, this.LiftEndpoint[0], 10, Color.Red);
+                Raylib.DrawCircle(this.center_x, this.LiftEndpoint[1], 10, Color.Red);
 
-            Raylib.DrawRectangleLines((int)TopRect.Pos.X, (int)TopRect.Pos.Y, (int)TopRect.Size.X, (int)TopRect.Size.Y, Color.Magenta);
-            Raylib.DrawRectangleLines((int)BottomRect.Pos.X, (int)BottomRect.Pos.Y, (int)BottomRect.Size.X, (int)BottomRect.Size.Y, Color.Magenta);
-#endif
+                Raylib.DrawRectangleLines((int)TopRect.Pos.X, (int)TopRect.Pos.Y, (int)TopRect.Size.X, (int)TopRect.Size.Y, Color.Magenta);
+                Raylib.DrawRectangleLines((int)BottomRect.Pos.X, (int)BottomRect.Pos.Y, (int)BottomRect.Size.X, (int)BottomRect.Size.Y, Color.Magenta);
+            }
         }
 
         public void update(Game game)

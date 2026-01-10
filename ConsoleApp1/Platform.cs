@@ -94,15 +94,16 @@ namespace ConsoleApp1
                 game.GlobalTextures.platform[0].DrawRect(tileRect);
             }
 
-#if DEBUG
-            if (collison_lines != null && collison_lines[0] != null)
+            if (game.is_debug)
             {
-                for (int i = 0; i < 4; i++)
+                if (collison_lines != null && collison_lines[0] != null)
                 {
-                    Raylib.DrawLine((int)collison_lines[i].Start.X, (int)collison_lines[i].Start.Y, (int)collison_lines[i].End.X, (int)collison_lines[i].End.Y, Color.SkyBlue);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Raylib.DrawLine((int)collison_lines[i].Start.X, (int)collison_lines[i].Start.Y, (int)collison_lines[i].End.X, (int)collison_lines[i].End.Y, Color.SkyBlue);
+                    }
                 }
             }
-#endif
         }
 
         public Line2D[] get_line_segments(int segment_len)

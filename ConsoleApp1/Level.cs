@@ -49,7 +49,7 @@ namespace ConsoleApp1
         public List<Line2D> generate_graf_lines()
         {
             List<Line2D> output = new List<Line2D>();
-            int segmentSize = 5; // Defined as 5px
+            int segmentSize = 5; 
 
             foreach(Platform platform in platforms)
             {
@@ -236,7 +236,7 @@ namespace ConsoleApp1
             }
             else if (ID == 3)
             {
-                this.barel = new OilBarel(new Vec2D(0, 0), true, 0, false);
+                this.barel = new OilBarel(new Vec2D(300,170), false, 1, true);
                 this.is_throwing_barrels = false;
 
                 this.DonkeyKongSpawnLocation = new Vec2D(666, 250);
@@ -247,7 +247,6 @@ namespace ConsoleApp1
 
                 player_start_pos = new Vec2D(100, 1050 - 80);
                 BarelDesponLocation = new Rect2D(-100, -100, 1, 1);
-
                 platforms[0] = new Platform(false, 14, new Vec2D(15, 1050), 0, ID);
                 platforms[1] = new Platform(false, 13, new Vec2D(62, 850), 0, ID);
                 platforms[2] = new Platform(false, 12, new Vec2D(108, 650), 0, ID);
@@ -260,8 +259,9 @@ namespace ConsoleApp1
 
                 void AddPair(float x, float y, int w)
                 {
-                    float leftX = x + (tileSize / 2);
-                    float rightX = x + (w * tileSize) - (tileSize / 2);
+                    int offset = 400;
+                    float leftX =offset;
+                    float rightX = 1333-offset;
                     breakPoints[bpIndex++] = new PlatformBreakPoint(new Vec2D(leftX, y), bpSize, true);
                     breakPoints[bpIndex++] = new PlatformBreakPoint(new Vec2D(rightX, y), bpSize, true);
                 }
@@ -272,14 +272,15 @@ namespace ConsoleApp1
                 AddPair(201, 250, 10);
 
                 int stairH = 6;
-                stairs[0] = new Stairs(300, 1050, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[1] = new Stairs(1033, 1050, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[2] = new Stairs(400, 850, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[3] = new Stairs(933, 850, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[4] = new Stairs(500, 650, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[5] = new Stairs(833, 650, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[6] = new Stairs(550, 450, stairH, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[7] = new Stairs(783, 450, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                int offset = 100;
+                stairs[0] = new Stairs(90, 1050, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[1] = new Stairs(1200, 1050, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[2] = new Stairs(125, 850, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[3] = new Stairs(1150, 850, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[4] = new Stairs(175, 650, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[5] = new Stairs(1100, 650, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[6] = new Stairs(225, 450, stairH, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[7] = new Stairs(1075, 450, stairH, false, true, ID, this.platforms, this.conveyerBelts);
             }
 
             Frame[0] = new Line2D(new Vec2D(0, 0), new Vec2D(0, 1100));
@@ -306,18 +307,19 @@ namespace ConsoleApp1
                 elevator.render(game);
             barel.render(game);
 
-#if DEBUG
-            Raylib.DrawRectangleLines((int)BarelDesponLocation.Pos.X, (int)BarelDesponLocation.Pos.Y, (int)BarelDesponLocation.Size.X, (int)BarelDesponLocation.Size.Y, Color.Red);
-            Raylib.DrawCircle((int)barel_spawn_point.X, (int)barel_spawn_point.Y, 5, Color.Red);
-            Raylib.DrawCircle((int)DonkeyKongSpawnLocation.X, (int)DonkeyKongSpawnLocation.Y, 5, Color.Red);
+            if (game.is_debug)
+            {
+                Raylib.DrawRectangleLines((int)BarelDesponLocation.Pos.X, (int)BarelDesponLocation.Pos.Y, (int)BarelDesponLocation.Size.X, (int)BarelDesponLocation.Size.Y, Color.Red);
+                Raylib.DrawCircle((int)barel_spawn_point.X, (int)barel_spawn_point.Y, 5, Color.Red);
+                Raylib.DrawCircle((int)DonkeyKongSpawnLocation.X, (int)DonkeyKongSpawnLocation.Y, 5, Color.Red);
 
-            if (LevelEndRect != null)
-                Raylib.DrawRectangleLines((int)LevelEndRect.Pos.X, (int)LevelEndRect.Pos.Y, (int)LevelEndRect.Size.X, (int)LevelEndRect.Size.Y, Color.Purple);
+                if (LevelEndRect != null)
+                    Raylib.DrawRectangleLines((int)LevelEndRect.Pos.X, (int)LevelEndRect.Pos.Y, (int)LevelEndRect.Size.X, (int)LevelEndRect.Size.Y, Color.Purple);
 
-            Raylib.DrawCircle((int)JumperSpawnPoint.X, (int)JumperSpawnPoint.Y, 5, Color.Orange);
-            Raylib.DrawLineV(new Vector2(JumperCollisionLine.Start.X, JumperCollisionLine.Start.Y), new Vector2(JumperCollisionLine.End.X, JumperCollisionLine.End.Y), Color.Green);
-            this.graf.render();
-#endif
+                Raylib.DrawCircle((int)JumperSpawnPoint.X, (int)JumperSpawnPoint.Y, 5, Color.Orange);
+                Raylib.DrawLineV(new Vector2(JumperCollisionLine.Start.X, JumperCollisionLine.Start.Y), new Vector2(JumperCollisionLine.End.X, JumperCollisionLine.End.Y), Color.Green);
+            }
+            this.graf.render(game.is_debug);
         }
         public bool is_level_end(Game game)
         {

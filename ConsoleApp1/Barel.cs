@@ -140,9 +140,8 @@ namespace ConsoleApp1
             
             game.GlobalTextures.Barel.DrawRectCentered(DrawRect, false, (float)r);
 
-#if DEBUG
-            render_debug();
-#endif
+            if (game.is_debug)
+                render_debug();
         }
 
         public void render_debug()

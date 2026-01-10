@@ -147,20 +147,21 @@ public class Jumper
             return;
         TextureObject texture = getTexture(game);
         texture.DrawBottomCenter(this.rect.Size.Y, false, this.pos);
-#if DEBUG
-        Raylib.DrawRectangleLines(
-            (int)rect.Pos.X, 
-            (int)rect.Pos.Y, 
-            (int)rect.Size.X, 
-            (int)rect.Size.Y, 
-            Color.Red
-        );
+        if (game.is_debug)
+        {
+            Raylib.DrawRectangleLines(
+                (int)rect.Pos.X, 
+                (int)rect.Pos.Y, 
+                (int)rect.Size.X, 
+                (int)rect.Size.Y, 
+                Color.Red
+            );
 
-        Raylib.DrawLineV(
-            new Vector2(jump_line.Start.X, jump_line.Start.Y), 
-            new Vector2(jump_line.End.X, jump_line.End.Y), 
-            Color.Green
-        );
-#endif
+            Raylib.DrawLineV(
+                new Vector2(jump_line.Start.X, jump_line.Start.Y), 
+                new Vector2(jump_line.End.X, jump_line.End.Y), 
+                Color.Green
+            );
+        }
     }
 }

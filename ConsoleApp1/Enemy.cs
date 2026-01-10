@@ -14,7 +14,7 @@ namespace ConsoleApp1
         int next_node = 0;
         float interpolation = 0;
         Rect2D rectangle;
-        float movement_speed = 90f;
+        float movement_speed = 250f;
         int height = 60;
         Vec2D render_base_point;
         private int[] path = new int[0];
@@ -50,26 +50,13 @@ namespace ConsoleApp1
                 int count = graf.Nodes.Count;
                 if (count == 0) return new int[0];
 
-                Vec2D startPos = graf.Nodes[start_index].Point;
-                List<int> validTargets = new List<int>();
-
-                for (int i = 0; i < count; i++)
-                {
-                    if (i == start_index) continue;
-                    if (startPos.DistanceTo(graf.Nodes[i].Point) >= 300f)
-                    {
-                        validTargets.Add(i);
-                    }
-                }
-
-                int end_index;
-                if (validTargets.Count > 0)
-                {
-                    end_index = validTargets[Utils.GetRandomInt(0, validTargets.Count - 1)];
-                }
-                else
+                int end_index = Utils.GetRandomInt(0, count - 1);
+                
+                int attempts = 0;
+                while (end_index == start_index && attempts < 10)
                 {
                     end_index = Utils.GetRandomInt(0, count - 1);
+                    attempts++;
                 }
 
                 return graf.GeneratePath(start_index, end_index);
@@ -210,10 +197,12 @@ namespace ConsoleApp1
                 TextureObject texture = game.GlobalTextures.EnemyTextures.explode_animation.GetCurrentTexture();
                 game.GlobalTextures.renderer.DrawTextureBottomCenter(texture.Texture, height, false, render_base_point, draw_side);
             }
-#if DEBUG
-            Color debugColor = is_hunter ? Color.Red : Color.Blue;
-            Raylib.DrawRectangleLines((int)rectangle.Pos.X, (int)rectangle.Pos.Y, (int)rectangle.Size.X, (int)rectangle.Size.Y, debugColor);
-#endif
+
+            if (game.is_debug)
+            {
+                Color debugColor = is_hunter ? Color.Red : Color.Blue;
+                Raylib.DrawRectangleLines((int)rectangle.Pos.X, (int)rectangle.Pos.Y, (int)rectangle.Size.X, (int)rectangle.Size.Y, debugColor);
+            }
         }
 
         public void Update(Game game, bool force_path_update)

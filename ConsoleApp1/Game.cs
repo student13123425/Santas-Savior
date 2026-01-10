@@ -12,15 +12,15 @@ namespace ConsoleApp1
     {
         public Level[] levels = new Level[4];
         public Player player;
-        public Golumn donkey_kong; 
+        public Golumn donkey_kong;
         public Barel[] barels = new Barel[99999];
         public Drops[] drops = new Drops[50];
         int barels_spawned = 0;
         public MainMenu MainMenu;
         public GameOverMenu GameOverMenu;
-        public YouWon YouWonScreen; 
+        public YouWon YouWonScreen;
         public int current_level_id = -1;
-        
+        public bool is_debug = true;
         bool is_game_over = false;
         public TextureMap GlobalTextures;
         public AudioMap GlobalAudio;
@@ -39,10 +39,13 @@ namespace ConsoleApp1
             donkey_kong = new Golumn(levels[0]);
             MainMenu = new MainMenu();
             GameOverMenu = new GameOverMenu();
-            YouWonScreen = new YouWon(); 
+            YouWonScreen = new YouWon();
             GlobalTextures = new TextureMap();
             GlobalAudio = new AudioMap();
             SaveFile = new SaveData();
+            
+            is_debug = SaveFile.is_debug;
+
             SantaClaus = new SantaClaus(levels[0].pricess_position);
         }
 
@@ -63,7 +66,7 @@ namespace ConsoleApp1
             else
             {
                 levels[current_level_id].render(this);
-                donkey_kong.render(this); 
+                donkey_kong.render(this);
                 player.render(this);
                 this.SantaClaus.render(this);
                 render_enemys();
@@ -94,9 +97,9 @@ namespace ConsoleApp1
                 this.current_level_id = 0;
 
             this.player = new Player(new Vec2D(this.levels[current_level_id].player_start_pos.X, this.levels[current_level_id].player_start_pos.Y));
-            this.donkey_kong = new Golumn(levels[current_level_id]); 
+            this.donkey_kong = new Golumn(levels[current_level_id]);
             
-            this.Robots.Clear(); // Clear robots on reset
+            this.Robots.Clear();
 
             this.barels = new Barel[99999];
             for (int i = 0; i < this.barels.Length; i++)
@@ -114,6 +117,15 @@ namespace ConsoleApp1
                 }
                 else
                     this.drops[i] = new Drops(new Vec2D(0, 0), this.GlobalTextures, 0, false);
+            }
+
+            foreach (var bp in levels[current_level_id].breakPoints)
+            {
+                if (bp != null)
+                {
+                    bp.broke = false;
+                    bp.is_active = true;
+                }
             }
             this.is_game_over = false;
         }
@@ -157,7 +169,7 @@ namespace ConsoleApp1
             if (current_level_id >= levels.Length)
             {
                 this.current_level_id = current_level_id;
-                return; 
+                return;
             }
 
             if (save)
@@ -167,9 +179,9 @@ namespace ConsoleApp1
             
             this.current_level_id = current_level_id;
             this.player = new Player(new Vec2D(this.levels[current_level_id].player_start_pos.X, this.levels[current_level_id].player_start_pos.Y));
-            this.donkey_kong = new Golumn(levels[current_level_id]); 
+            this.donkey_kong = new Golumn(levels[current_level_id]);
             
-            this.Robots.Clear(); // Clear robots on start level
+            this.Robots.Clear();
 
             this.barels = new Barel[99999];
             for (int i = 0; i < this.barels.Length; i++)
@@ -230,6 +242,12 @@ namespace ConsoleApp1
 
         public void update()
         {
+            if (Raylib.IsKeyPressed(KeyboardKey.Tab))
+            {
+                is_debug = !is_debug;
+                SaveFile.SetDebug(is_debug);
+            }
+
             if (!player.IsDying)
             {
                 this.GlobalTextures.ConveyorTextures.ConvayerAnimation.Update();
@@ -261,35 +279,36 @@ namespace ConsoleApp1
 
                 if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.Space) || Raylib.IsKeyPressed(KeyboardKey.Escape))
                 {
-                    current_level_id = -1; 
-                    YouWonScreen.Reset(); 
+                    current_level_id = -1;
+                    YouWonScreen.Reset();
                 }
             }
             else
             {
-#if DEBUG
-                if (Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl))
+                if (is_debug)
                 {
-                    int levelToLoad = -1;
-
-                    if (Raylib.IsKeyPressed(KeyboardKey.One)) levelToLoad = 0;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Two)) levelToLoad = 1;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Three)) levelToLoad = 2;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Four)) levelToLoad = 3;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Five)) levelToLoad = 4;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Six)) levelToLoad = 5;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Seven)) levelToLoad = 6;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Eight)) levelToLoad = 7;
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Nine)) levelToLoad = 8; 
-                    else if (Raylib.IsKeyPressed(KeyboardKey.Zero)) levelToLoad = 9;
-
-                    if (levelToLoad != -1)
+                    if (Raylib.IsKeyDown(KeyboardKey.LeftControl) || Raylib.IsKeyDown(KeyboardKey.RightControl))
                     {
-                        start_level(levelToLoad, false);
-                        if (current_level_id >= levels.Length) return;
+                        int levelToLoad = -1;
+
+                        if (Raylib.IsKeyPressed(KeyboardKey.One)) levelToLoad = 0;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Two)) levelToLoad = 1;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Three)) levelToLoad = 2;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Four)) levelToLoad = 3;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Five)) levelToLoad = 4;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Six)) levelToLoad = 5;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Seven)) levelToLoad = 6;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Eight)) levelToLoad = 7;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Nine)) levelToLoad = 8;
+                        else if (Raylib.IsKeyPressed(KeyboardKey.Zero)) levelToLoad = 9;
+
+                        if (levelToLoad != -1)
+                        {
+                            start_level(levelToLoad, false);
+                            if (current_level_id >= levels.Length) return;
+                        }
                     }
                 }
-#endif
                 if (current_level_id < levels.Length)
                 {
                     if (!player.IsDying)

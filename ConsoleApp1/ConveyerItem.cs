@@ -65,15 +65,16 @@ namespace ConsoleApp1
             float width = t.DrawBottomCenter(height, false, this.pos);
             this.update_rect(width, height);
 
-#if DEBUG
-            Raylib.DrawRectangleLines(
-                (int)rect.Pos.X,
-                (int)rect.Pos.Y,
-                (int)rect.Size.X,
-                (int)rect.Size.Y,
-                Color.Red
-            );
-#endif
+            if (game.is_debug)
+            {
+                Raylib.DrawRectangleLines(
+                    (int)rect.Pos.X,
+                    (int)rect.Pos.Y,
+                    (int)rect.Size.X,
+                    (int)rect.Size.Y,
+                    Color.Red
+                );
+            }
         }
     }
 }

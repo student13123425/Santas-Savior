@@ -103,11 +103,12 @@ namespace ConsoleApp1
             foreach (ConveyerItem item in items)
                 item.render(game);
 
-#if DEBUG
-            Raylib.DrawCircle(end_points[0], (int)pos.Y, 10, Color.Blue);
-            Raylib.DrawCircle(end_points[1], (int)pos.Y, 10, Color.Blue);
-            Raylib.DrawLine(end_points[0], (int)pos.Y, end_points[1], (int)pos.Y, Color.Red);
-#endif
+            if (game.is_debug)
+            {
+                Raylib.DrawCircle(end_points[0], (int)pos.Y, 10, Color.Blue);
+                Raylib.DrawCircle(end_points[1], (int)pos.Y, 10, Color.Blue);
+                Raylib.DrawLine(end_points[0], (int)pos.Y, end_points[1], (int)pos.Y, Color.Red);
+            }
         }
 
         private void CalculateBounds(float totalWidth)
