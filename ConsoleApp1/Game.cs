@@ -125,6 +125,8 @@ namespace ConsoleApp1
                     bp.broke = false;
                 }
             }
+
+            levels[current_level_id].barel.Reset();
             this.is_game_over = false;
         }
 
@@ -204,6 +206,7 @@ namespace ConsoleApp1
                 }
             }
 
+            levels[current_level_id].barel.Reset();
             SantaClaus = new SantaClaus(levels[current_level_id].pricess_position);
         }
 
