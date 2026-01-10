@@ -76,15 +76,16 @@ namespace ConsoleApp1
                 Raylib.DrawLine(x + s, y, x + s - (s / 4), y + 5, Color.Gray);
             }
 
-#if DEBUG
-            Raylib.DrawRectangleLines(
-                (int)triggerRect.Pos.X,
-                (int)triggerRect.Pos.Y,
-                (int)triggerRect.Size.X,
-                (int)triggerRect.Size.Y,
-                Color.Purple
-            );
-#endif
+            if (game.is_debug)
+            {
+                Raylib.DrawRectangleLines(
+                    (int)triggerRect.Pos.X,
+                    (int)triggerRect.Pos.Y,
+                    (int)triggerRect.Size.X,
+                    (int)triggerRect.Size.Y,
+                    Color.Purple
+                );
+            }
         }
     }
 }
