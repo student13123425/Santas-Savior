@@ -128,6 +128,17 @@ namespace ConsoleApp1
                         instance.GlobalAudio.EnemyHit.Play(false);
                     }
                 }
+
+                for (int i = 0; i < instance.Robots.Count; i++)
+                {
+                    Enemy e = instance.Robots[i];
+                    if (e.is_alive && !e.isDying && active_rect.CollideWith(e.rectangle))
+                    {
+                        this.score += 300;
+                        e.Kill(instance);
+                        instance.GlobalAudio.EnemyHit.Play(false);
+                    }
+                }
             }
         }
 

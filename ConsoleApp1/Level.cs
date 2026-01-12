@@ -167,10 +167,10 @@ namespace ConsoleApp1
                 stairs[1] = new Stairs(466 + 50, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[2] = new Stairs(733 - 10, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[3] = new Stairs(1000 + 70, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[4] = new Stairs(1115, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[5] = new Stairs(160, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[4] = new Stairs(1100, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[5] = new Stairs(250, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[6] = new Stairs(600 - 20, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[7] = new Stairs(720, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[7] = new Stairs(750, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[8] = new Stairs(425, groundY - 200, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[9] = new Stairs(720 + 125, groundY - 200, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[10] = new Stairs(200, 450, 12, false, true, ID, this.platforms, this.conveyerBelts);

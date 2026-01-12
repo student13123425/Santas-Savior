@@ -156,8 +156,14 @@ namespace ConsoleApp1
                 this.barels[i].update(level);
             for (int i = 0; i < this.Jumpers.Length; i++)
                 this.Jumpers[i].update(this);
-            for (int i = 0; i < this.Robots.Count; i++)
-                this.Robots[i].Update(this,true);
+            for (int i = this.Robots.Count - 1; i >= 0; i--)
+            {
+                this.Robots[i].Update(this, true);
+                if (this.Robots[i].ShouldRemove)
+                {
+                    this.Robots.RemoveAt(i);
+                }
+            }
         }
         void update_drops()
         {

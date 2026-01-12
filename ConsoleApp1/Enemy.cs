@@ -8,12 +8,13 @@ namespace ConsoleApp1
     {
         public static Enemy HuntingEnemy = null;
         private static double last_update_time = 0;
-        bool is_alive = true;
-        bool isDying = false;
+        public bool is_alive = true;
+        public bool isDying = false;
+        public bool ShouldRemove = false;
         int current_node = 0;
         int next_node = 0;
         float interpolation = 0;
-        Rect2D rectangle;
+        public Rect2D rectangle;
         float movement_speed = 250f;
         int height = 60;
         Vec2D render_base_point;
@@ -35,7 +36,7 @@ namespace ConsoleApp1
             path = get_path(game);
         }
 
-        int[] get_path(Game game)
+        public int[] get_path(Game game)
         {
             if (is_hunter)
             {
@@ -53,7 +54,7 @@ namespace ConsoleApp1
                 int end_index = Utils.GetRandomInt(0, count - 1);
                 
                 int attempts = 0;
-                while (end_index == start_index && attempts < 10)
+                while ((end_index == start_index || graf.Nodes[start_index].Point.DistanceTo(graf.Nodes[end_index].Point) < 100) && attempts < 15)
                 {
                     end_index = Utils.GetRandomInt(0, count - 1);
                     attempts++;
@@ -76,7 +77,7 @@ namespace ConsoleApp1
             Vec2D point = line.Interpolate(interpolation);
             int width = (int)((float)height * 0.55);
             Vec2D Size = new Vec2D(width, height);
-            Vec2D Position = new Vec2D(point.X - Size.X / 2, point.Y);
+            Vec2D Position = new Vec2D(point.X - Size.X / 2, point.Y - height);
             rectangle = new Rect2D(Position, Size);
             render_base_point = point;
         }
@@ -118,31 +119,38 @@ namespace ConsoleApp1
             }
         }
 
+        public void Kill(Game game)
+        {
+            if (isDying) return;
+            
+            is_alive = false;
+            isDying = true;
+            game.GlobalTextures.EnemyTextures.explode_animation.Play(true);
+
+            if (is_hunter)
+            {
+                HuntingEnemy = null;
+                is_hunter = false;
+                foreach (var robot in game.Robots)
+                {
+                    if (robot.is_alive && !robot.isDying && !robot.is_hunter)
+                    {
+                        robot.is_hunter = true;
+                        Enemy.HuntingEnemy = robot;
+                        robot.path = robot.get_path(game); 
+                        break;
+                    }
+                }
+            }
+        }
+
         void process_posible_exlosion(Game game)
         {
             if (isDying)
                 return;
             if (game.player.is_hit(rectangle, game))
             {
-                is_alive = false;
-                isDying = true;
-                game.GlobalTextures.EnemyTextures.explode_animation.Play(false);
-
-                if (is_hunter)
-                {
-                    HuntingEnemy = null;
-                    is_hunter = false;
-                    foreach (var robot in game.Robots)
-                    {
-                        if (robot.is_alive && !robot.isDying && !robot.is_hunter)
-                        {
-                            robot.is_hunter = true;
-                            Enemy.HuntingEnemy = robot;
-                            robot.path = robot.get_path(game); 
-                            break;
-                        }
-                    }
-                }
+                Kill(game);
             }
         }
 
@@ -150,33 +158,58 @@ namespace ConsoleApp1
         {
             current_node = next_node;
             
-            if (path.Length == 0 || (path.Length > 0 && current_node == path[path.Length - 1]))
+            bool needNewPath = false;
+
+            if (path.Length == 0)
+            {
+                needNewPath = true;
+            }
+            else
+            {
+                int targetNode = path[path.Length - 1];
+                if (current_node == targetNode)
+                {
+                    needNewPath = true;
+                }
+            }
+
+            if (needNewPath)
             {
                 path = get_path(game);
                 interpolation = 0;
-                if (path.Length == 0) return;
                 
-                next_node = path[0];
+                if (path.Length > 0)
+                {
+                    next_node = path[0];
+                }
+                else
+                {
+                    next_node = current_node; 
+                }
                 return;
             }
 
-            bool is_last_current = false;
-            bool found_next = false;
-            foreach (int v in path)
+            int currentIndexInPath = -1;
+            for (int i = 0; i < path.Length; i++)
             {
-                if (is_last_current)
+                if (path[i] == current_node)
                 {
-                    next_node = v;
-                    found_next = true;
+                    currentIndexInPath = i;
                     break;
                 }
-                is_last_current = v == current_node;
             }
-            
-            if (!found_next)
+
+            if (currentIndexInPath != -1 && currentIndexInPath + 1 < path.Length)
+            {
+                next_node = path[currentIndexInPath + 1];
+            }
+            else
             {
                 path = get_path(game);
-                if(path.Length > 0) next_node = path[0];
+                if (path.Length > 0)
+                    next_node = path[0];
+                else
+                    next_node = current_node;
             }
 
             interpolation = 0;
@@ -207,6 +240,16 @@ namespace ConsoleApp1
 
         public void Update(Game game, bool force_path_update)
         {
+            if (isDying)
+            {
+                bool finished = game.GlobalTextures.EnemyTextures.explode_animation.Update();
+                if (finished)
+                {
+                    ShouldRemove = true;
+                }
+                return;
+            }
+
             if (is_alive && !isDying && (HuntingEnemy == null || !HuntingEnemy.is_alive) && !is_hunter)
             {
                 HuntingEnemy = this;
