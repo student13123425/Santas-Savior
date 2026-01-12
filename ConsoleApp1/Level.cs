@@ -29,11 +29,11 @@ namespace ConsoleApp1
         public Line2D[] Frame = new Line2D[2];
         public Vec2D barel_spawn_point;
         public Rect2D BarelDesponLocation;
-        public Vec2D DonkeyKongSpawnLocation;
+        public Vec2D SnowGolumnSpawnLocation;
         public Rect2D LevelEndRect;
         public bool is_throwing_barrels = false;
         public bool is_throwing_jumpers = false;
-        public Vec2D pricess_position;
+        public Vec2D SantaClausePosition;
         public Elevator[] elevators = new Elevator[50];
         public List<LevelDropData> LevelDrops = new List<LevelDropData>();
         public ConveyerBelt[] conveyerBelts = new ConveyerBelt[50];
@@ -79,7 +79,7 @@ namespace ConsoleApp1
         public Level(int ID)
         {
             this.ID = ID;
-            this.DonkeyKongSpawnLocation = new Vec2D(0, 0);
+            this.SnowGolumnSpawnLocation = new Vec2D(0, 0);
             for (int i = 0; i < enemySpawnPoints.Length; i++)
                 enemySpawnPoints[i] = new Vec2D(-1, -1);
             for (int i = 0; i < platforms.Length; i++)
@@ -102,11 +102,11 @@ namespace ConsoleApp1
                 this.is_throwing_barrels = true;
 
                 this.decorations[0] = new Decoration("./sprites/BarrelStack.png", new Vec2D(65, 300 - 80), 165, true);
-                this.DonkeyKongSpawnLocation = new Vec2D(250, 300);
+                this.SnowGolumnSpawnLocation = new Vec2D(250, 300);
                 this.barel_spawn_point = new Vec2D(400, 300 - 55);
                 platforms[9] = new Platform(false, 2, new Vec2D(400, 160), 0, ID);
-                this.pricess_position = new Vec2D(493, 160);
-                this.LevelEndRect = new Rect2D(440, 100, 40, 60);
+                this.SantaClausePosition = new Vec2D(493, 160);
+                this.LevelEndRect = new Rect2D(600, 000, 40, 300);
 
                 stairs[11] = new Stairs(400, 300, 12, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[12] = new Stairs(539, 300, 12, false, true, ID, this.platforms, this.conveyerBelts);
@@ -143,10 +143,10 @@ namespace ConsoleApp1
                 int topY = 250;
                 int rightStackX = 868;
 
-                this.DonkeyKongSpawnLocation = new Vec2D(100, topY - 5);
+                this.SnowGolumnSpawnLocation = new Vec2D(100, topY - 5);
                 this.barel_spawn_point = new Vec2D(150, topY - 5);
-                this.pricess_position = new Vec2D(250, topY - 40);
-                this.LevelEndRect = new Rect2D(rightStackX + 100, topY - 40, 40, 60);
+                this.SantaClausePosition = new Vec2D(250, 145);
+                this.LevelEndRect = new Rect2D(rightStackX-400, topY - 340, 40, 340);
 
                 player_start_pos = new Vec2D(100, groundY - 80);
                 BarelDesponLocation = new Rect2D(-100, -100, 1, 1);
@@ -161,28 +161,29 @@ namespace ConsoleApp1
 
                 platforms[1] = new Platform(false, 4, new Vec2D(250, groundY - 400), 0, ID);
                 platforms[2] = new Platform(false, 4, new Vec2D(750, groundY - 400), 0, ID);
-                platforms[4] = new Platform(false, 6, new Vec2D(200, 210), 0, ID);
+                platforms[4] = new Platform(false, 3, new Vec2D(200, 150), 0, ID);
 
                 stairs[0] = new Stairs(200 - 70, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[1] = new Stairs(466 + 50, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[2] = new Stairs(733 - 10, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[3] = new Stairs(1000 + 70, groundY, 6, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[4] = new Stairs(1100, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[4] = new Stairs(1075, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[5] = new Stairs(250, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[6] = new Stairs(600 - 20, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[7] = new Stairs(750, groundY - 400, 6, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[13] = new Stairs(850, 429, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[8] = new Stairs(425, groundY - 200, 6, false, true, ID, this.platforms, this.conveyerBelts);
                 stairs[9] = new Stairs(720 + 125, groundY - 200, 6, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[10] = new Stairs(200, 450, 12, false, true, ID, this.platforms, this.conveyerBelts);
-                stairs[11] = new Stairs(350, 450, 12, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[10] = new Stairs(200, 210, 12, false, true, ID, this.platforms, this.conveyerBelts);
+                stairs[11] = new Stairs(350, 210, 12, false, true, ID, this.platforms, this.conveyerBelts);
             }
             else if (ID == 2)
             {
                 this.barel = new OilBarel(new Vec2D(0, 0), true, 0, false);
                 this.is_throwing_barrels = false;
                 int ground_y = 1100 - 50;
-                this.DonkeyKongSpawnLocation = new Vec2D(150, 350);
-                this.pricess_position = new Vec2D(390, 200);
+                this.SnowGolumnSpawnLocation = new Vec2D(150, 350);
+                this.SantaClausePosition = new Vec2D(390, 200);
                 this.barel_spawn_point = new Vec2D(0, 0);
                 this.LevelEndRect = new Rect2D(500, 0, 40, 340);
 
@@ -239,11 +240,11 @@ namespace ConsoleApp1
                 this.barel = new OilBarel(new Vec2D(300,170), false, 1, true);
                 this.is_throwing_barrels = false;
 
-                this.DonkeyKongSpawnLocation = new Vec2D(666, 250);
+                this.SnowGolumnSpawnLocation = new Vec2D(666, 250);
                 this.barel_spawn_point = new Vec2D(0, 0);
 
-                this.pricess_position = new Vec2D(500, 250);
-                this.LevelEndRect = new Rect2D(450, 190, 40, 60);
+                this.SantaClausePosition = new Vec2D(500, 250);
+                this.LevelEndRect = new Rect2D(-1, -1, 0, 0);
 
                 player_start_pos = new Vec2D(100, 1050 - 80);
                 BarelDesponLocation = new Rect2D(-100, -100, 1, 1);
@@ -311,7 +312,7 @@ namespace ConsoleApp1
             {
                 Raylib.DrawRectangleLines((int)BarelDesponLocation.Pos.X, (int)BarelDesponLocation.Pos.Y, (int)BarelDesponLocation.Size.X, (int)BarelDesponLocation.Size.Y, Color.Red);
                 Raylib.DrawCircle((int)barel_spawn_point.X, (int)barel_spawn_point.Y, 5, Color.Red);
-                Raylib.DrawCircle((int)DonkeyKongSpawnLocation.X, (int)DonkeyKongSpawnLocation.Y, 5, Color.Red);
+                Raylib.DrawCircle((int)SnowGolumnSpawnLocation.X, (int)SnowGolumnSpawnLocation.Y, 5, Color.Red);
 
                 if (LevelEndRect != null)
                     Raylib.DrawRectangleLines((int)LevelEndRect.Pos.X, (int)LevelEndRect.Pos.Y, (int)LevelEndRect.Size.X, (int)LevelEndRect.Size.Y, Color.Purple);

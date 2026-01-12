@@ -13,7 +13,6 @@ namespace ConsoleApp1
         Rect2D rect;
         Rect2D fireHitbox;
         private Timer timer = null;
-        private Timer start_delay_timer = null;
         bool is_empty = false;
         bool is_active = true;
         bool is_to_spawn = false;
@@ -21,7 +20,7 @@ namespace ConsoleApp1
         private const float timer_duration = 15.0f;
         private const float initial_spawn_delay = 5.0f;
         private int spawned_count = 0;
-        private const int max_spawn_count = 2;
+        private const int max_spawn_count = 5;
 
         public OilBarel(Vec2D pos, bool e, int spawn_mode, bool isActive = true)
         {
@@ -54,7 +53,6 @@ namespace ConsoleApp1
         {
             spawned_count = 0;
             timer = null;
-            start_delay_timer = null;
         }
 
         public int get_closest_spawn_point_id(Game game)
@@ -86,23 +84,10 @@ namespace ConsoleApp1
                 if (game.Robots.Count >= max_spawn_count)
                     return;
 
-                if (start_delay_timer == null)
-                {
-                    start_delay_timer = new Timer(initial_spawn_delay, false);
-                    start_delay_timer.Play();
-                }
-
-                if (start_delay_timer.IsPlaying)
-                {
-                    if (!start_delay_timer.Update())
-                    {
-                        return; 
-                    }
-                }
-
                 if (timer == null)
                 {
-                    timer = new Timer(timer_duration, false);
+                    float current_delay = (spawned_count == 0) ? initial_spawn_delay : timer_duration;
+                    timer = new Timer(current_delay, false);
                     timer.Play();
                 }
                 else if (timer != null)

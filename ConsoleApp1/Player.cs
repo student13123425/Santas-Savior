@@ -41,7 +41,7 @@ namespace ConsoleApp1
 
         public void updateClosestGrafNode(Game game)
         {
-            this.closest_graf_node=game.levels[game.current_level_id].graf.get_cloasest_node(this.pos);
+            this.closest_graf_node=game.levels[game.current_level_id].graf.get_cloasest_node(this.is_on_ground_colision_rect.Center);
         }
         public int GetHealth() { return health; }
         public void SetHealth(int h) { health = h; }
