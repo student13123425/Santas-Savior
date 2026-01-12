@@ -6,13 +6,11 @@ namespace HelloWorld
 {
     internal static class Program
     {
-        [System.STAThread]
+
         public static void Main()
         {
             string baseDir = AppContext.BaseDirectory;
-            Console.WriteLine($"App base directory: {baseDir}");
-            
-            Raylib.InitWindow(1333, 1100, "Donkey Kong remake");
+            Raylib.InitWindow(1333, 1100, "Santa savior");
             Raylib.InitAudioDevice();
 
             Game game = new Game();
