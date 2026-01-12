@@ -46,7 +46,7 @@ namespace ConsoleApp1
             
             is_debug = SaveFile.is_debug;
 
-            SantaClaus = new SantaClaus(levels[0].pricess_position);
+            SantaClaus = new SantaClaus(levels[0].SantaClausePosition);
         }
 
         public void render()
@@ -213,7 +213,7 @@ namespace ConsoleApp1
             }
 
             levels[current_level_id].barel.Reset();
-            SantaClaus = new SantaClaus(levels[current_level_id].pricess_position);
+            SantaClaus = new SantaClaus(levels[current_level_id].SantaClausePosition);
         }
 
         public void spawn_barel(bool throw_side, bool isDown)

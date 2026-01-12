@@ -21,7 +21,7 @@ namespace ConsoleApp1
         private bool is_jumper=false;
         public Golumn(Level level)
         {
-            pos = level.DonkeyKongSpawnLocation;
+            pos = level.SnowGolumnSpawnLocation;
             height = 150;
             throwTimer = new Timer(0.66f, false);
             throwTimer.Play();
