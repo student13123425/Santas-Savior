@@ -6,7 +6,6 @@ namespace ConsoleApp1
 {
     public class Enemy
     {
-        public static Enemy HuntingEnemy = null;
         private static double last_update_time = 0;
         public bool is_alive = true;
         public bool isDying = false;
@@ -19,49 +18,20 @@ namespace ConsoleApp1
         int height = 60;
         Vec2D render_base_point;
         private int[] path = new int[0];
-        private bool is_hunter = false;
 
         public Enemy(Game game, Vec2D spawn_position)
         {
             current_node = game.levels[game.current_level_id].graf.get_cloasest_node(spawn_position);
             next_node = current_node;
             update_rect2D(game.levels[game.current_level_id].graf);
-
-            if (HuntingEnemy == null || !HuntingEnemy.is_alive)
-            {
-                HuntingEnemy = this;
-                is_hunter = true;
-            }
-
             path = get_path(game);
         }
 
         public int[] get_path(Game game)
         {
-            if (is_hunter)
-            {
-                int end_index = game.player.closest_graf_node;
-                int start_index = next_node;
-                return game.levels[game.current_level_id].graf.GeneratePath(start_index, end_index);
-            }
-            else
-            {
-                int start_index = next_node;
-                var graf = game.levels[game.current_level_id].graf;
-                int count = graf.Nodes.Count;
-                if (count == 0) return new int[0];
-
-                int end_index = Utils.GetRandomInt(0, count - 1);
-                
-                int attempts = 0;
-                while ((end_index == start_index || graf.Nodes[start_index].Point.DistanceTo(graf.Nodes[end_index].Point) < 100) && attempts < 15)
-                {
-                    end_index = Utils.GetRandomInt(0, count - 1);
-                    attempts++;
-                }
-
-                return graf.GeneratePath(start_index, end_index);
-            }
+            int end_index = game.player.closest_graf_node;
+            int start_index = next_node;
+            return game.levels[game.current_level_id].graf.GeneratePath(start_index, end_index);
         }
 
         bool get_movement_side(Graf graf)
@@ -126,22 +96,6 @@ namespace ConsoleApp1
             is_alive = false;
             isDying = true;
             game.GlobalTextures.EnemyTextures.explode_animation.Play(true);
-
-            if (is_hunter)
-            {
-                HuntingEnemy = null;
-                is_hunter = false;
-                foreach (var robot in game.Robots)
-                {
-                    if (robot.is_alive && !robot.isDying && !robot.is_hunter)
-                    {
-                        robot.is_hunter = true;
-                        Enemy.HuntingEnemy = robot;
-                        robot.path = robot.get_path(game); 
-                        break;
-                    }
-                }
-            }
         }
 
         void process_posible_exlosion(Game game)
@@ -233,8 +187,7 @@ namespace ConsoleApp1
 
             if (game.is_debug)
             {
-                Color debugColor = is_hunter ? Color.Red : Color.Blue;
-                Raylib.DrawRectangleLines((int)rectangle.Pos.X, (int)rectangle.Pos.Y, (int)rectangle.Size.X, (int)rectangle.Size.Y, debugColor);
+                Raylib.DrawRectangleLines((int)rectangle.Pos.X, (int)rectangle.Pos.Y, (int)rectangle.Size.X, (int)rectangle.Size.Y, Color.Red);
             }
         }
 
@@ -248,13 +201,6 @@ namespace ConsoleApp1
                     ShouldRemove = true;
                 }
                 return;
-            }
-
-            if (is_alive && !isDying && (HuntingEnemy == null || !HuntingEnemy.is_alive) && !is_hunter)
-            {
-                HuntingEnemy = this;
-                is_hunter = true;
-                force_path_update = true; 
             }
 
             double currentTime = Raylib.GetTime();

@@ -18,10 +18,10 @@ namespace ConsoleApp1
         bool is_active = true;
         bool is_to_spawn = false;
         bool is_spawn_on_barrel = false;
-        private const float timer_duration = 0.7f;
-        private const float initial_spawn_delay = 2.0f;
+        private const float timer_duration = 15.0f;
+        private const float initial_spawn_delay = 5.0f;
         private int spawned_count = 0;
-        private const int max_spawn_count = 3;
+        private const int max_spawn_count = 2;
 
         public OilBarel(Vec2D pos, bool e, int spawn_mode, bool isActive = true)
         {
